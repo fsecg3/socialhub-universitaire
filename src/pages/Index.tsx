@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -13,7 +12,7 @@ const Index = () => {
   const services = [
     {
       title: 'Logements universitaires',
-      description: 'Accédez aux demandes de logement, suivez l'attribution et gérez votre dossier en ligne.',
+      description: "Accédez aux demandes de logement, suivez l'attribution et gérez votre dossier en ligne.",
       icon: Building,
       href: '/housing',
     },
@@ -50,7 +49,7 @@ const Index = () => {
     },
     {
       title: 'Suivi en temps réel',
-      description: 'Suivez l'état de vos demandes et recevez des notifications sur leur avancement.'
+      description: "Suivez l'état de vos demandes et recevez des notifications sur leur avancement."
     },
     {
       title: 'Accessibilité 24/7',
@@ -81,10 +80,10 @@ const Index = () => {
                 Plateforme de gestion des œuvres sociales
               </span>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold leading-tight">
-                Simplifiez l'accès aux <span className="text-primary">services sociaux</span> universitaires
+                Simplifiez l{"'"}accès aux <span className="text-primary">services sociaux</span> universitaires
               </h1>
               <p className="text-lg text-muted-foreground max-w-xl">
-                Accédez à tous les services sociaux de l'université sur une plateforme centralisée, 
+                Accédez à tous les services sociaux de l{"'"}université sur une plateforme centralisée, 
                 intuitive et personnalisée pour les étudiants, enseignants et personnel.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
@@ -183,7 +182,7 @@ const Index = () => {
                 Des services adaptés à vos besoins
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Découvrez l'ensemble des services sociaux proposés par l'université pour faciliter 
+                Découvrez l{"'"}ensemble des services sociaux proposés par l{"'"}université pour faciliter 
                 votre vie quotidienne sur le campus.
               </p>
             </div>
@@ -222,7 +221,7 @@ const Index = () => {
                   <div className="glass rounded-xl p-4 md:p-6 self-end max-w-xs">
                     <h3 className="text-lg font-medium mb-2">Transparence</h3>
                     <p className="text-sm text-muted-foreground">
-                      Suivez l'état de vos demandes en temps réel et comprenez chaque étape du processus.
+                      Suivez l{"'"}état de vos demandes en temps réel et comprenez chaque étape du processus.
                     </p>
                   </div>
                 </div>
@@ -235,7 +234,7 @@ const Index = () => {
                 
                 <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 text-center">
                   <span className="text-sm px-4 py-2 bg-white/80 rounded-full">
-                    d'efficacité dans le traitement des demandes
+                    d{"'"}efficacité dans le traitement des demandes
                   </span>
                 </div>
               </div>
@@ -250,7 +249,7 @@ const Index = () => {
               </h2>
               <p className="text-muted-foreground">
                 SocialHub Universitaire repense entièrement la gestion des œuvres sociales pour 
-                faciliter l'accès aux services et réduire les délais de traitement des demandes.
+                faciliter l{"'"}accès aux services et réduire les délais de traitement des demandes.
               </p>
               
               <div className="space-y-6 pt-4">
@@ -341,7 +340,7 @@ const Index = () => {
                   Prêt à simplifier votre vie universitaire?
                 </h2>
                 <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
-                  Rejoignez SocialHub Universitaire et accédez à l'ensemble des services sociaux de l'université 
+                  Rejoignez SocialHub Universitaire et accédez à l{"'"}ensemble des services sociaux de l{"'"}université 
                   en quelques clics. Créez votre compte dès maintenant.
                 </p>
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
@@ -349,7 +348,7 @@ const Index = () => {
                     Créer un compte
                   </Button>
                   <Button variant="outline" className="rounded-full px-8 py-6 text-base">
-                    Contacter l'assistance
+                    Contacter l{"'"}assistance
                   </Button>
                 </div>
               </div>

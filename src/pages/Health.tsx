@@ -5,7 +5,7 @@ import Footer from '@/components/layout/Footer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { HeartPulse, Calendar, FileText, HelpCircle, ActivitySquare, Wheelchair, Pill, Microscope, Stethoscope } from 'lucide-react';
+import { HeartPulse, Calendar, FileText, HelpCircle, ActivitySquare, Accessibility, Pill, Microscope, Stethoscope } from 'lucide-react';
 import FadeIn from '@/components/animations/FadeIn';
 import { useToast } from '@/hooks/use-toast';
 
@@ -31,7 +31,7 @@ const Health = () => {
     {
       title: "Aide aux personnes en situation de handicap",
       description: "Soutien personnalisé et aides financières spécifiques pour les personnes en situation de handicap.",
-      icon: Wheelchair,
+      icon: Accessibility,
       action: "Consulter les aides disponibles"
     },
     {
@@ -119,7 +119,7 @@ const Health = () => {
               </span>
               <h1 className="text-4xl font-display font-bold mb-4">Services de Santé</h1>
               <p className="text-muted-foreground max-w-3xl mx-auto">
-                Accédez à l'ensemble des services de santé proposés par l'université pour vous accompagner 
+                Accédez à l{"'"}ensemble des services de santé proposés par l{"'"}université pour vous accompagner 
                 dans votre parcours personnel et professionnel.
               </p>
             </div>
@@ -320,18 +320,18 @@ const Health = () => {
               <div className="flex flex-col md:flex-row gap-8 items-center">
                 <div className="w-full md:w-2/3">
                   <h2 className="text-2xl font-display font-bold mb-4">
-                    Besoin d'assistance médicale immédiate ?
+                    Besoin d{"'"}assistance médicale immédiate ?
                   </h2>
                   <p className="text-muted-foreground mb-6">
                     Notre équipe de professionnels de santé est disponible pour vous accompagner 
-                    en cas d'urgence ou pour toute question relative à votre santé.
+                    en cas d{"'"}urgence ou pour toute question relative à votre santé.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4">
                     <Button className="bg-gradient-to-r from-primary to-blue-500" onClick={showNotAvailableMessage}>
                       Contacter un médecin
                     </Button>
                     <Button variant="outline" onClick={showNotAvailableMessage}>
-                      Numéros d'urgence
+                      Numéros d{"'"}urgence
                     </Button>
                   </div>
                 </div>

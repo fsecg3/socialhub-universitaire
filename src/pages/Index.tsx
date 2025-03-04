@@ -12,7 +12,7 @@ const Index = () => {
   const services = [
     {
       title: 'Logements universitaires',
-      description: "Accédez aux demandes de logement, suivez l'attribution et gérez votre dossier en ligne.",
+      description: 'Accédez aux demandes de logement, suivez l{"\'"}attribution et gérez votre dossier en ligne.',
       icon: Building,
       href: '/housing',
     },
@@ -49,7 +49,7 @@ const Index = () => {
     },
     {
       title: 'Suivi en temps réel',
-      description: "Suivez l'état de vos demandes et recevez des notifications sur leur avancement."
+      description: 'Suivez l{"\'"}état de vos demandes et recevez des notifications sur leur avancement.'
     },
     {
       title: 'Accessibilité 24/7',

@@ -1,433 +1,348 @@
 
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Stethoscope, Syringe, Activity, Clipboard, FileSpreadsheet, FileType, FileText } from 'lucide-react';
+import React, { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { HeartPulse, Calendar, FileText, HelpCircle, ActivitySquare, Wheelchair, Pill, Microscope, Stethoscope } from 'lucide-react';
 import FadeIn from '@/components/animations/FadeIn';
+import { useToast } from '@/hooks/use-toast';
 
 const Health = () => {
-  const medicalServices = [
+  const [activeTab, setActiveTab] = useState('services');
+  const { toast } = useToast();
+
+  const showNotAvailableMessage = () => {
+    toast({
+      title: "Fonctionnalité à venir",
+      description: "Cette fonctionnalité sera disponible prochainement.",
+      duration: 3000,
+    });
+  };
+
+  const healthServices = [
     {
-      title: 'Consultations médicales',
-      description: 'Prenez rendez-vous avec un médecin généraliste ou spécialiste du réseau universitaire.',
-      icon: <Stethoscope className="h-6 w-6" />,
-      action: 'Prendre rendez-vous',
+      title: "Interventions chirurgicales",
+      description: "Prise en charge et remboursement des opérations chirurgicales programmées ou d'urgence.",
+      icon: ActivitySquare,
+      action: "Demander une prise en charge"
     },
     {
-      title: 'Opérations chirurgicales',
-      description: 'Demandez une prise en charge pour une intervention chirurgicale programmée.',
-      icon: <Syringe className="h-6 w-6" />,
-      action: 'Demander une prise en charge',
+      title: "Aide aux personnes en situation de handicap",
+      description: "Soutien personnalisé et aides financières spécifiques pour les personnes en situation de handicap.",
+      icon: Wheelchair,
+      action: "Consulter les aides disponibles"
     },
     {
-      title: 'Maladies chroniques',
-      description: 'Suivez votre traitement et bénéficiez d{"\'"}un accompagnement personnalisé.',
-      icon: <Activity className="h-6 w-6" />,
-      action: 'Accéder au suivi',
+      title: "Suivi des maladies chroniques",
+      description: "Programme de soutien continu et aide financière adaptée pour les maladies chroniques reconnues.",
+      icon: Pill,
+      action: "S'inscrire au programme"
     },
     {
-      title: 'Handicap',
-      description: 'Découvrez les aides spécifiques pour les personnes en situation de handicap.',
-      icon: <FileType className="h-6 w-6" />,
-      action: 'Voir les aides',
+      title: "Consultations médicales",
+      description: "Accès au réseau de praticiens conventionnés et remboursement des consultations.",
+      icon: Stethoscope,
+      action: "Trouver un praticien"
     },
     {
-      title: 'Remboursement',
-      description: 'Soumettez vos demandes de remboursement de frais médicaux et suivez leur traitement.',
-      icon: <FileSpreadsheet className="h-6 w-6" />,
-      action: 'Soumettre une demande',
-    },
-    {
-      title: 'Examens médicaux',
-      description: 'Planifiez vos examens (radiographies, analyses) et consultez vos résultats.',
-      icon: <FileText className="h-6 w-6" />,
-      action: 'Planifier un examen',
+      title: "Examens médicaux",
+      description: "Suivi et remboursement des examens médicaux, radiographies et analyses de laboratoire.",
+      icon: Microscope,
+      action: "Soumettre une demande"
     },
   ];
 
-  // Données de démonstration pour les rendez-vous à venir
   const upcomingAppointments = [
     {
-      id: 'apt-001',
-      doctor: 'Dr. Karim Benali',
-      specialty: 'Médecine générale',
-      date: '15 Mai 2024',
-      time: '14:30',
-      location: 'Centre médical universitaire - Bâtiment A',
+      date: "15 Juin 2024",
+      time: "10:30",
+      doctor: "Dr. Bensalem",
+      specialty: "Cardiologie",
+      location: "Centre Médical Universitaire"
     },
     {
-      id: 'apt-002',
-      doctor: 'Dr. Amina Rahmani',
-      specialty: 'Cardiologie',
-      date: '22 Mai 2024',
-      time: '10:15',
-      location: 'Centre médical universitaire - Bâtiment B',
-    },
+      date: "22 Juin 2024",
+      time: "14:00",
+      doctor: "Dr. Mansouri",
+      specialty: "Ophtalmologie",
+      location: "Clinique El Azhar"
+    }
   ];
 
-  // Données de démonstration pour les remboursements
-  const reimbursements = [
+  const pendingReimbursements = [
     {
-      id: 'remb-001',
-      type: 'Consultation spécialiste',
-      amount: '2500 DA',
-      submissionDate: '02 Mai 2024',
-      status: 'En traitement',
-      progress: 50,
+      id: "RMB-2024-0123",
+      date: "05 Mai 2024",
+      type: "Consultation spécialiste",
+      amount: "4500 DA",
+      status: "En cours de traitement"
     },
     {
-      id: 'remb-002',
-      type: 'Achat médicaments',
-      amount: '4300 DA',
-      submissionDate: '18 Avril 2024',
-      status: 'Approuvé',
-      progress: 100,
+      id: "RMB-2024-0097",
+      date: "28 Avril 2024",
+      type: "Analyses de laboratoire",
+      amount: "7800 DA",
+      status: "En attente de validation"
+    }
+  ];
+
+  const faqs = [
+    {
+      question: "Comment soumettre une demande de remboursement médical ?",
+      answer: "Pour soumettre une demande de remboursement, connectez-vous à votre espace personnel, accédez à la section 'Services de santé' puis 'Demande de remboursement'. Remplissez le formulaire en ligne et téléchargez les pièces justificatives requises (ordonnance, factures acquittées). Vous pouvez suivre l'état de votre demande dans la section 'Mes remboursements'."
     },
     {
-      id: 'remb-003',
-      type: 'Analyses sanguines',
-      amount: '3700 DA',
-      submissionDate: '10 Avril 2024',
-      status: 'Remboursé',
-      progress: 100,
+      question: "Quels sont les délais de remboursement des frais médicaux ?",
+      answer: "Le délai de remboursement est généralement de 7 à 15 jours ouvrables après validation de votre demande. Ce délai peut varier selon la complexité du dossier et la période de l'année. Vous recevrez une notification par email et SMS dès que votre remboursement sera effectué."
     },
+    {
+      question: "Comment prendre rendez-vous avec un médecin conventionné ?",
+      answer: "Vous pouvez prendre rendez-vous directement depuis votre espace personnel dans la section 'Services de santé' puis 'Prendre rendez-vous'. Consultez la liste des praticiens conventionnés, choisissez le spécialiste souhaité et sélectionnez un créneau disponible. Une confirmation vous sera envoyée par email et SMS."
+    },
+    {
+      question: "Quels sont les taux de remboursement des différents actes médicaux ?",
+      answer: "Les taux de remboursement varient selon la nature des actes médicaux : consultations généralistes (80%), consultations spécialistes (70%), analyses de laboratoire (60-90%), imagerie médicale (50-100%), hospitalisation (jusqu'à 90%). Pour connaître le taux exact applicable à votre situation, consultez la grille des remboursements disponible dans la section 'Documentation'."
+    }
   ];
 
   return (
     <>
       <Header />
-      
-      {/* Hero Section */}
-      <section className="relative pt-24 pb-16 px-6 md:px-10 bg-gradient-to-b from-blue-50 to-white dark:from-blue-950/20 dark:to-background">
-        <div className="max-w-7xl mx-auto">
-          <FadeIn delay={100} className="space-y-6 text-center max-w-3xl mx-auto">
-            <span className="inline-block text-sm font-medium px-4 py-1.5 rounded-full bg-primary/10 text-primary">
-              Services de santé
-            </span>
-            <h1 className="text-4xl md:text-5xl font-display font-bold">
-              Votre santé, notre priorité
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Accédez à l{"\'"}ensemble des services de santé proposés par l{"\'"}université 
-              et bénéficiez d{"\'"}un suivi médical complet pour vous et votre famille.
-            </p>
+      <main className="min-h-screen bg-secondary/10 pt-24 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn>
+            <div className="mb-12 text-center">
+              <span className="inline-block text-sm font-medium px-4 py-1.5 rounded-full bg-primary/10 text-primary mb-4">
+                Santé et bien-être
+              </span>
+              <h1 className="text-4xl font-display font-bold mb-4">Services de Santé</h1>
+              <p className="text-muted-foreground max-w-3xl mx-auto">
+                Accédez à l'ensemble des services de santé proposés par l'université pour vous accompagner 
+                dans votre parcours personnel et professionnel.
+              </p>
+            </div>
           </FadeIn>
-        </div>
-      </section>
-      
-      {/* Main Content */}
-      <section className="py-16 px-6 md:px-10">
-        <div className="max-w-7xl mx-auto">
-          <Tabs defaultValue="services" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-8">
-              <TabsTrigger value="services">Services disponibles</TabsTrigger>
-              <TabsTrigger value="appointments">Mes rendez-vous</TabsTrigger>
-              <TabsTrigger value="reimbursements">Mes remboursements</TabsTrigger>
-            </TabsList>
-            
-            {/* Onglet Services */}
+
+          <Tabs defaultValue="services" className="space-y-8" onValueChange={setActiveTab}>
+            <div className="flex justify-center">
+              <TabsList className="grid grid-cols-1 md:grid-cols-4 w-full max-w-2xl">
+                <TabsTrigger value="services" className="flex gap-2 items-center">
+                  <HeartPulse className="w-4 h-4" />
+                  <span>Services</span>
+                </TabsTrigger>
+                <TabsTrigger value="appointments" className="flex gap-2 items-center">
+                  <Calendar className="w-4 h-4" />
+                  <span>Rendez-vous</span>
+                </TabsTrigger>
+                <TabsTrigger value="reimbursements" className="flex gap-2 items-center">
+                  <FileText className="w-4 h-4" />
+                  <span>Remboursements</span>
+                </TabsTrigger>
+                <TabsTrigger value="faq" className="flex gap-2 items-center">
+                  <HelpCircle className="w-4 h-4" />
+                  <span>FAQ</span>
+                </TabsTrigger>
+              </TabsList>
+            </div>
+
             <TabsContent value="services">
-              <FadeIn className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {medicalServices.map((service) => (
-                  <Card key={service.title} className="flex flex-col h-full border border-border/50 overflow-hidden transition-all duration-300 hover:shadow-md">
-                    <CardHeader>
-                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4">
-                        {service.icon}
-                      </div>
-                      <CardTitle>{service.title}</CardTitle>
-                      <CardDescription>{service.description}</CardDescription>
-                    </CardHeader>
-                    <CardFooter className="mt-auto">
-                      <Button asChild variant="outline" className="w-full group-hover:bg-primary/5 transition-colors">
-                        <Link to="#">
-                          <span>{service.action}</span>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="ml-2 transition-transform group-hover:translate-x-1"
-                          >
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                            <polyline points="12 5 19 12 12 19"></polyline>
-                          </svg>
-                        </Link>
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                ))}
-              </FadeIn>
-              
-              <FadeIn delay={300} className="mt-12 bg-secondary/30 rounded-xl p-8 text-center">
-                <Clipboard className="h-12 w-12 mx-auto text-primary mb-4" />
-                <h3 className="text-2xl font-display font-bold mb-2">
-                  Besoin d{"\'"}une assistance médicale urgente?
-                </h3>
-                <p className="text-muted-foreground max-w-lg mx-auto mb-6">
-                  Pour toute urgence médicale, contactez directement le service médical de l{"\'"}université
-                  ou rendez-vous au centre médical du campus.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button className="rounded-full bg-gradient-to-r from-primary to-blue-500">
-                    Numéros d{"\'"}urgence
-                  </Button>
-                  <Button variant="outline" className="rounded-full">
-                    Localiser le centre médical
-                  </Button>
-                </div>
-              </FadeIn>
-            </TabsContent>
-            
-            {/* Onglet Rendez-vous */}
-            <TabsContent value="appointments">
-              {upcomingAppointments.length > 0 ? (
-                <div className="space-y-6">
-                  <h2 className="text-2xl font-display font-semibold mb-4">Rendez-vous à venir</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {upcomingAppointments.map((appointment) => (
-                      <Card key={appointment.id} className="border border-border/50">
-                        <CardHeader>
-                          <CardTitle className="flex items-center gap-2">
-                            <Stethoscope className="h-5 w-5 text-primary" />
-                            {appointment.doctor}
-                          </CardTitle>
-                          <CardDescription>{appointment.specialty}</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                          <div className="flex justify-between items-center">
-                            <span className="text-sm text-muted-foreground">Date et heure</span>
-                            <span className="font-medium">{appointment.date} - {appointment.time}</span>
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-sm text-muted-foreground">Lieu</span>
-                            <span className="font-medium">{appointment.location}</span>
-                          </div>
-                        </CardContent>
-                        <CardFooter className="flex justify-between">
-                          <Button variant="outline" size="sm">
-                            Modifier
-                          </Button>
-                          <Button variant="destructive" size="sm">
-                            Annuler
-                          </Button>
-                        </CardFooter>
-                      </Card>
-                    ))}
-                  </div>
-                  
-                  <div className="mt-8 flex justify-center">
-                    <Button className="rounded-full px-8 py-6 bg-gradient-to-r from-primary to-blue-500 hover:shadow-lg transition-all text-base">
-                      Prendre un nouveau rendez-vous
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <Stethoscope className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                  <h3 className="text-2xl font-semibold mb-2">Aucun rendez-vous planifié</h3>
-                  <p className="text-muted-foreground mb-6">
-                    Vous n{"\'"}avez actuellement aucun rendez-vous médical planifié.
-                  </p>
-                  <Button className="rounded-full px-8 py-6 bg-gradient-to-r from-primary to-blue-500 hover:shadow-lg transition-all text-base">
-                    Prendre un rendez-vous
-                  </Button>
-                </div>
-              )}
-            </TabsContent>
-            
-            {/* Onglet Remboursements */}
-            <TabsContent value="reimbursements">
-              <div className="space-y-6">
-                <div className="flex justify-between items-center">
-                  <h2 className="text-2xl font-display font-semibold">Mes demandes de remboursement</h2>
-                  <Button>
-                    Nouvelle demande
-                  </Button>
-                </div>
-                
-                <div className="space-y-4">
-                  {reimbursements.map((reimbursement) => (
-                    <Card key={reimbursement.id} className="border border-border/50">
-                      <CardContent className="p-6">
-                        <div className="flex flex-col md:flex-row justify-between gap-4">
-                          <div>
-                            <h4 className="font-medium">{reimbursement.type}</h4>
-                            <p className="text-sm text-muted-foreground">Soumis le {reimbursement.submissionDate}</p>
-                          </div>
-                          <div className="text-right">
-                            <span className="font-bold text-lg">{reimbursement.amount}</span>
-                          </div>
+              <FadeIn>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {healthServices.map((service, index) => (
+                    <Card key={service.title} className="overflow-hidden transition-all duration-300 hover:shadow-md border border-border/50 h-full">
+                      <CardHeader className="p-6">
+                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4">
+                          <service.icon size={24} />
                         </div>
-                        
-                        <div className="mt-4">
-                          <div className="flex justify-between items-center mb-2">
-                            <span className="text-sm font-medium">
-                              {reimbursement.status}
-                            </span>
-                            <span className="text-sm text-muted-foreground">
-                              {reimbursement.progress}%
-                            </span>
-                          </div>
-                          <div className="h-2 w-full bg-secondary rounded-full overflow-hidden">
-                            <div 
-                              className={`h-full rounded-full ${
-                                reimbursement.status === 'Approuvé' 
-                                  ? 'bg-green-500' 
-                                  : reimbursement.status === 'Remboursé' 
-                                    ? 'bg-blue-500' 
-                                    : 'bg-primary'
-                              }`}
-                              style={{ width: `${reimbursement.progress}%` }}
-                            ></div>
-                          </div>
-                        </div>
-                        
-                        <div className="mt-4 flex justify-end gap-2">
-                          <Button variant="outline" size="sm">
-                            Détails
-                          </Button>
-                          {reimbursement.status === 'En traitement' && (
-                            <Button variant="outline" size="sm">
-                              Modifier
-                            </Button>
-                          )}
-                        </div>
+                        <CardTitle>{service.title}</CardTitle>
+                      </CardHeader>
+                      <CardContent className="p-6 pt-0">
+                        <CardDescription className="text-base">{service.description}</CardDescription>
                       </CardContent>
+                      <CardFooter className="p-6 pt-0">
+                        <Button variant="outline" className="w-full" onClick={showNotAvailableMessage}>
+                          {service.action}
+                        </Button>
+                      </CardFooter>
                     </Card>
                   ))}
                 </div>
-                
-                <Card className="border border-border/50 bg-muted/50 p-4">
-                  <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                    <div>
-                      <h4 className="font-medium">Total des remboursements de l{"\'"}année</h4>
-                      <p className="text-sm text-muted-foreground">Année universitaire 2023-2024</p>
-                    </div>
-                    <div className="text-right">
-                      <span className="font-bold text-xl text-primary">10 500 DA</span>
-                    </div>
-                  </div>
+              </FadeIn>
+            </TabsContent>
+
+            <TabsContent value="appointments">
+              <FadeIn>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Mes rendez-vous médicaux</CardTitle>
+                    <CardDescription>
+                      Consultez et gérez vos rendez-vous avec les professionnels de santé conventionnés.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {upcomingAppointments.length > 0 ? (
+                      <div className="space-y-4">
+                        {upcomingAppointments.map((appointment, index) => (
+                          <div key={index} className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 border rounded-lg">
+                            <div className="flex gap-4 items-center mb-4 md:mb-0">
+                              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                                <Calendar size={20} />
+                              </div>
+                              <div>
+                                <h3 className="font-medium">{appointment.doctor}</h3>
+                                <p className="text-sm text-muted-foreground">{appointment.specialty}</p>
+                                <div className="flex items-center gap-2 text-sm mt-1">
+                                  <span>{appointment.date}</span>
+                                  <span>•</span>
+                                  <span>{appointment.time}</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex gap-2 w-full md:w-auto">
+                              <Button variant="outline" size="sm" className="flex-1 md:flex-initial" onClick={showNotAvailableMessage}>
+                                Modifier
+                              </Button>
+                              <Button variant="destructive" size="sm" className="flex-1 md:flex-initial" onClick={showNotAvailableMessage}>
+                                Annuler
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-8">
+                        <p className="text-muted-foreground">Vous n'avez aucun rendez-vous à venir.</p>
+                      </div>
+                    )}
+                  </CardContent>
+                  <CardFooter className="flex justify-between">
+                    <Button variant="outline" onClick={showNotAvailableMessage}>Historique</Button>
+                    <Button onClick={showNotAvailableMessage}>Prendre rendez-vous</Button>
+                  </CardFooter>
                 </Card>
-              </div>
+              </FadeIn>
+            </TabsContent>
+
+            <TabsContent value="reimbursements">
+              <FadeIn>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Mes remboursements</CardTitle>
+                    <CardDescription>
+                      Suivez l'état de vos demandes de remboursements de frais médicaux.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {pendingReimbursements.length > 0 ? (
+                      <div className="space-y-4">
+                        <div className="overflow-x-auto">
+                          <table className="w-full">
+                            <thead className="bg-secondary/30">
+                              <tr>
+                                <th className="text-left font-medium p-3">Référence</th>
+                                <th className="text-left font-medium p-3">Date</th>
+                                <th className="text-left font-medium p-3">Type</th>
+                                <th className="text-left font-medium p-3">Montant</th>
+                                <th className="text-left font-medium p-3">Statut</th>
+                                <th className="text-left font-medium p-3">Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {pendingReimbursements.map((reimbursement, index) => (
+                                <tr key={index} className="border-b">
+                                  <td className="p-3">{reimbursement.id}</td>
+                                  <td className="p-3">{reimbursement.date}</td>
+                                  <td className="p-3">{reimbursement.type}</td>
+                                  <td className="p-3">{reimbursement.amount}</td>
+                                  <td className="p-3">
+                                    <span className="px-2 py-1 bg-amber-100 text-amber-800 rounded-full text-xs">
+                                      {reimbursement.status}
+                                    </span>
+                                  </td>
+                                  <td className="p-3">
+                                    <Button variant="ghost" size="sm" onClick={showNotAvailableMessage}>
+                                      Détails
+                                    </Button>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-center py-8">
+                        <p className="text-muted-foreground">Vous n'avez aucune demande de remboursement en cours.</p>
+                      </div>
+                    )}
+                  </CardContent>
+                  <CardFooter className="flex justify-between">
+                    <Button variant="outline" onClick={showNotAvailableMessage}>Historique</Button>
+                    <Button onClick={showNotAvailableMessage}>Nouvelle demande</Button>
+                  </CardFooter>
+                </Card>
+              </FadeIn>
+            </TabsContent>
+
+            <TabsContent value="faq">
+              <FadeIn>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Questions fréquentes</CardTitle>
+                    <CardDescription>
+                      Retrouvez les réponses aux questions les plus fréquemment posées concernant les services de santé.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-6">
+                      {faqs.map((faq, index) => (
+                        <div key={index} className="border-b pb-4 last:border-0">
+                          <h3 className="font-medium text-lg mb-2">{faq.question}</h3>
+                          <p className="text-muted-foreground">{faq.answer}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                  <CardFooter>
+                    <Button variant="outline" className="w-full" onClick={showNotAvailableMessage}>
+                      Poser une question
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </FadeIn>
             </TabsContent>
           </Tabs>
-        </div>
-      </section>
-      
-      {/* FAQ Section */}
-      <section className="py-16 px-6 md:px-10 bg-secondary/30">
-        <div className="max-w-5xl mx-auto">
-          <FadeIn className="text-center mb-12">
-            <span className="inline-block text-sm font-medium px-4 py-1.5 rounded-full bg-primary/10 text-primary mb-4">
-              Questions fréquentes
-            </span>
-            <h2 className="text-3xl md:text-4xl font-display font-bold">
-              Comment pouvons-nous vous aider?
-            </h2>
-          </FadeIn>
-          
-          <div className="space-y-4">
-            <FadeIn delay={100}>
-              <Card className="border border-border/50">
-                <CardHeader className="cursor-pointer">
-                  <CardTitle className="text-lg">Comment prendre rendez-vous avec un médecin?</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    Vous pouvez prendre rendez-vous directement sur la plateforme en vous connectant à votre compte,
-                    puis en accédant à la section "Services de santé" et en cliquant sur "Prendre rendez-vous".
-                    Vous pourrez alors choisir le médecin, la date et l{"\'"}heure qui vous conviennent.
+
+          <FadeIn className="mt-16">
+            <div className="bg-gradient-to-br from-primary/10 to-blue-500/10 rounded-2xl p-8 md:p-12">
+              <div className="flex flex-col md:flex-row gap-8 items-center">
+                <div className="w-full md:w-2/3">
+                  <h2 className="text-2xl font-display font-bold mb-4">
+                    Besoin d'assistance médicale immédiate ?
+                  </h2>
+                  <p className="text-muted-foreground mb-6">
+                    Notre équipe de professionnels de santé est disponible pour vous accompagner 
+                    en cas d'urgence ou pour toute question relative à votre santé.
                   </p>
-                </CardContent>
-              </Card>
-            </FadeIn>
-            
-            <FadeIn delay={200}>
-              <Card className="border border-border/50">
-                <CardHeader className="cursor-pointer">
-                  <CardTitle className="text-lg">Comment soumettre une demande de remboursement?</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    Pour soumettre une demande de remboursement, accédez à l{"\'"}onglet "Mes remboursements"
-                    et cliquez sur "Nouvelle demande". Remplissez le formulaire en détaillant le type de soins,
-                    la date et le montant, puis téléchargez les justificatifs requis (factures, ordonnances, etc.).
-                  </p>
-                </CardContent>
-              </Card>
-            </FadeIn>
-            
-            <FadeIn delay={300}>
-              <Card className="border border-border/50">
-                <CardHeader className="cursor-pointer">
-                  <CardTitle className="text-lg">Quels sont les délais de remboursement?</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    Les demandes de remboursement sont généralement traitées dans un délai de 10 à 15 jours ouvrables.
-                    Une fois approuvée, le versement est effectué sur votre compte bancaire dans un délai de 5 jours
-                    ouvrables supplémentaires.
-                  </p>
-                </CardContent>
-              </Card>
-            </FadeIn>
-            
-            <FadeIn delay={400}>
-              <Card className="border border-border/50">
-                <CardHeader className="cursor-pointer">
-                  <CardTitle className="text-lg">Comment bénéficier d{"\'"}une prise en charge pour une intervention chirurgicale?</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    Pour bénéficier d{"\'"}une prise en charge pour une intervention chirurgicale, vous devez soumettre
-                    une demande préalable accompagnée d{"\'"}un certificat médical et d{"\'"}un devis détaillé.
-                    Le service médical universitaire examinera votre dossier et vous informera du montant pris en charge
-                    et des démarches à suivre.
-                  </p>
-                </CardContent>
-              </Card>
-            </FadeIn>
-          </div>
-        </div>
-      </section>
-      
-      {/* CTA Section */}
-      <section className="py-16 px-6 md:px-10">
-        <div className="max-w-5xl mx-auto">
-          <FadeIn>
-            <div className="bg-gradient-to-br from-primary/10 to-blue-500/10 rounded-2xl p-10 md:p-16 text-center relative overflow-hidden">
-              <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-              <div className="relative z-10">
-                <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-                  Besoin d{"\'"}aide pour vos démarches de santé?
-                </h2>
-                <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
-                  Notre équipe est à votre disposition pour vous accompagner dans toutes vos démarches liées aux services de santé.
-                  N{"\'"}hésitez pas à nous contacter pour toute question ou demande d{"\'"}information.
-                </p>
-                <div className="flex flex-col sm:flex-row justify-center gap-4">
-                  <Button className="rounded-full px-8 py-6 bg-gradient-to-r from-primary to-blue-500 hover:shadow-lg transition-all text-base">
-                    Contacter le service médical
-                  </Button>
-                  <Button variant="outline" className="rounded-full px-8 py-6 text-base">
-                    Consulter le guide santé
-                  </Button>
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Button className="bg-gradient-to-r from-primary to-blue-500" onClick={showNotAvailableMessage}>
+                      Contacter un médecin
+                    </Button>
+                    <Button variant="outline" onClick={showNotAvailableMessage}>
+                      Numéros d'urgence
+                    </Button>
+                  </div>
+                </div>
+                <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-white shadow-md flex items-center justify-center">
+                  <HeartPulse className="w-12 h-12 md:w-16 md:h-16 text-primary" />
                 </div>
               </div>
             </div>
           </FadeIn>
         </div>
-      </section>
-      
+      </main>
       <Footer />
     </>
   );

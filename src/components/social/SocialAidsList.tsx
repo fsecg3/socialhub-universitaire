@@ -8,111 +8,14 @@ import { AidType, AidCategory } from '@/hooks/useSocialAids';
 
 interface SocialAidsListProps {
   onActionClick: (category: AidCategory) => void;
+  aids: AidType[]; // Add the aids prop to the interface
 }
 
-const SocialAidsList: React.FC<SocialAidsListProps> = ({ onActionClick }) => {
-  const socialAids: AidType[] = [
-    {
-      id: "aid-marriage",
-      title: "Allocation de mariage",
-      description: "Aide financière accordée aux personnels de l'université à l'occasion de leur mariage.",
-      icon: PartyPopper,
-      eligibility: "Personnel universitaire et enseignants en activité",
-      documents: [
-        { name: "Certificat de mariage", required: true },
-        { name: "Copies des cartes d'identité", required: true },
-        { name: "Justificatif d'emploi", required: true },
-        { name: "Demande écrite", required: true },
-        { name: "RIB bancaire", required: true }
-      ],
-      amount: "50 000 DA",
-      category: "marriage"
-    },
-    {
-      id: "aid-birth",
-      title: "Allocation de naissance",
-      description: "Prime attribuée aux parents à l'occasion de la naissance d'un enfant.",
-      icon: Baby,
-      eligibility: "Personnel universitaire et enseignants en activité",
-      documents: [
-        { name: "Certificat de naissance", required: true },
-        { name: "Livret de famille", required: true },
-        { name: "Preuve d'affiliation", required: true },
-        { name: "Attestation de travail", required: true },
-        { name: "RIB bancaire", required: true }
-      ],
-      amount: "30 000 DA",
-      category: "birth"
-    },
-    {
-      id: "aid-circumcision",
-      title: "Allocation de circoncision",
-      description: "Aide financière accordée à l'occasion de la circoncision d'un enfant.",
-      icon: Gift,
-      eligibility: "Personnel universitaire et enseignants avec enfants de sexe masculin",
-      documents: [
-        { name: "Certificat médical de circoncision", required: true },
-        { name: "Acte de naissance de l'enfant", required: true },
-        { name: "Livret de famille", required: true },
-        { name: "Attestation de travail", required: true },
-        { name: "RIB bancaire", required: true }
-      ],
-      amount: "25 000 DA",
-      category: "circumcision"
-    },
-    {
-      id: "aid-retirement",
-      title: "Allocation de départ à la retraite",
-      description: "Prime versée aux personnels lors de leur départ à la retraite.",
-      icon: GraduationCap,
-      eligibility: "Personnel universitaire et enseignants partant à la retraite",
-      documents: [
-        { name: "Décision de mise à la retraite", required: true },
-        { name: "Relevé de carrière", required: true },
-        { name: "Attestation de travail", required: true },
-        { name: "Pièce d'identité", required: true },
-        { name: "RIB bancaire", required: true }
-      ],
-      amount: "Variable selon l'ancienneté",
-      category: "retirement"
-    },
-    {
-      id: "aid-education",
-      title: "Allocation scolaire",
-      description: "Aide financière pour les frais de scolarité des enfants du personnel universitaire.",
-      icon: School,
-      eligibility: "Personnel universitaire et enseignants avec enfants scolarisés",
-      documents: [
-        { name: "Certificat de scolarité", required: true },
-        { name: "Bulletins scolaires", required: true },
-        { name: "Justificatif de revenus familiaux", required: true },
-        { name: "Livret de famille", required: true },
-        { name: "RIB bancaire", required: true }
-      ],
-      amount: "15 000 DA par enfant scolarisé",
-      category: "education"
-    },
-    {
-      id: "aid-funeral",
-      title: "Allocation funéraire",
-      description: "Aide financière accordée aux familles lors du décès d'un proche.",
-      icon: Heart,
-      eligibility: "Personnel universitaire et familles en cas de décès d'un proche",
-      documents: [
-        { name: "Acte de décès", required: true },
-        { name: "Justificatif de lien familial", required: true },
-        { name: "Attestation de travail", required: true },
-        { name: "RIB bancaire", required: true }
-      ],
-      amount: "40 000 DA",
-      category: "funeral"
-    }
-  ];
-
+const SocialAidsList: React.FC<SocialAidsListProps> = ({ onActionClick, aids }) => {
   return (
     <FadeIn>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {socialAids.map((aid) => (
+        {aids.map((aid) => (
           <Card key={aid.id} className="overflow-hidden transition-all duration-300 hover:shadow-md border border-border/50 h-full">
             <CardHeader className="p-6">
               <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4">

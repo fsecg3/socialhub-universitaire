@@ -16,6 +16,9 @@ interface NewRequestFormProps {
   onBackClick: () => void;
   onSubmit: (formData: any) => void;
   isSubmitting: boolean;
+  aidDetails: AidType | null; // Add the aidDetails prop
+  uploadedDocuments: Record<string, boolean>; // Add the uploadedDocuments prop
+  onDocumentUpload: (documentName: string) => void; // Add the onDocumentUpload prop
 }
 
 const NewRequestForm: React.FC<NewRequestFormProps> = ({ 
@@ -23,7 +26,10 @@ const NewRequestForm: React.FC<NewRequestFormProps> = ({
   selectedAidCategory,
   onBackClick,
   onSubmit,
-  isSubmitting
+  isSubmitting,
+  aidDetails,
+  uploadedDocuments,
+  onDocumentUpload
 }) => {
   const [formState, setFormState] = useState({
     fullName: '',
@@ -50,12 +56,7 @@ const NewRequestForm: React.FC<NewRequestFormProps> = ({
   };
 
   const simulateFileUpload = (documentName: string) => {
-    if (!formState.documentsUploaded.includes(documentName)) {
-      setFormState(prev => ({
-        ...prev,
-        documentsUploaded: [...prev.documentsUploaded, documentName]
-      }));
-    }
+    onDocumentUpload(documentName);
   };
 
   const socialAids: AidType[] = [
@@ -157,7 +158,7 @@ const NewRequestForm: React.FC<NewRequestFormProps> = ({
   ];
 
   const selectedAid = selectedAidCategory 
-    ? socialAids.find(aid => aid.category === selectedAidCategory)
+    ? aidDetails || socialAids.find(aid => aid.category === selectedAidCategory)
     : null;
 
   if (!selectedAidCategory) {
@@ -296,7 +297,7 @@ const NewRequestForm: React.FC<NewRequestFormProps> = ({
                         className="h-8"
                         onClick={() => simulateFileUpload(doc.name)}
                       >
-                        {formState.documentsUploaded.includes(doc.name) ? (
+                        {uploadedDocuments[doc.name] ? (
                           <span className="text-green-500 flex items-center gap-1">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <path d="M20 6L9 17l-5-5"></path>
@@ -348,7 +349,8 @@ const NewRequestForm: React.FC<NewRequestFormProps> = ({
           </Button>
           <Button 
             onClick={handleSubmit}
-            disabled={!formState.agreeToTerms || isSubmitting || formState.documentsUploaded.length === 0}
+            disabled={!formState.agreeToTerms || isSubmitting || 
+              Object.keys(uploadedDocuments).length === 0}
           >
             {isSubmitting ? (
               <span className="flex items-center gap-2">

@@ -8,8 +8,8 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Health from "./pages/Health";
 import SocialAids from "./pages/SocialAids";
+import Loans from "./pages/Loans";
 // Import new pages when they are created
-// import Loans from "./pages/Loans";
 // import SpecialServices from "./pages/SpecialServices";
 // import Activities from "./pages/Activities";
 
@@ -29,7 +29,7 @@ const App = () => (
           <Route path="/health" element={<Health />} />
           <Route path="/activities" element={<NotFound />} />
           <Route path="/services" element={<NotFound />} />
-          <Route path="/loans" element={<NotFound />} />
+          <Route path="/loans" element={<Loans />} />
           <Route path="/special-services" element={<NotFound />} />
           <Route path="/privacy" element={<NotFound />} />
           <Route path="/terms" element={<NotFound />} />

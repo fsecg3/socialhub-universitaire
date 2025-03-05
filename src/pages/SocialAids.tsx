@@ -3,7 +3,7 @@ import React from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { GraduationCap, Baby, School, PartyPopper, Gift } from 'lucide-react';
+import { GraduationCap, Baby, School, PartyPopper, Gift, FileText } from 'lucide-react';
 import useSocialAids from '@/hooks/useSocialAids';
 import SocialAidsHeader from '@/components/social/SocialAidsHeader';
 import SocialAidsList from '@/components/social/SocialAidsList';
@@ -20,7 +20,13 @@ const SocialAids = () => {
     selectedAidCategory, 
     handleAidSelection,
     isSubmitting,
-    submitAidRequest 
+    submitAidRequest,
+    availableAids,
+    pendingRequests,
+    getAidDetails,
+    uploadedDocuments,
+    handleDocumentUpload,
+    cancelRequest
   } = useSocialAids();
 
   return (
@@ -38,7 +44,7 @@ const SocialAids = () => {
                   <span>Aperçu</span>
                 </TabsTrigger>
                 <TabsTrigger value="myrequests" className="flex gap-2 items-center">
-                  <Gift className="w-4 h-4" />
+                  <FileText className="w-4 h-4" />
                   <span>Mes demandes</span>
                 </TabsTrigger>
                 <TabsTrigger value="newrequest" className="flex gap-2 items-center">
@@ -49,14 +55,19 @@ const SocialAids = () => {
             </div>
 
             <TabsContent value="overview">
-              <SocialAidsList onActionClick={handleAidSelection} />
+              <SocialAidsList 
+                onActionClick={handleAidSelection} 
+                aids={availableAids}
+              />
             </TabsContent>
 
             <TabsContent value="myrequests">
               <PendingRequestsList 
+                requests={pendingRequests}
                 onDetailsClick={showNotAvailableMessage}
                 onHistoryClick={showNotAvailableMessage}
                 onNewRequestClick={() => setActiveTab('newrequest')}
+                onCancelClick={cancelRequest}
               />
             </TabsContent>
 
@@ -67,6 +78,9 @@ const SocialAids = () => {
                 onBackClick={() => setActiveTab('overview')} 
                 onSubmit={submitAidRequest}
                 isSubmitting={isSubmitting}
+                aidDetails={getAidDetails(selectedAidCategory)}
+                uploadedDocuments={uploadedDocuments}
+                onDocumentUpload={handleDocumentUpload}
               />
             </TabsContent>
           </Tabs>

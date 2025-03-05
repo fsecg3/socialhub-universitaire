@@ -13,7 +13,15 @@ import SupportBanner from '@/components/social/SupportBanner';
 import FadeIn from '@/components/animations/FadeIn';
 
 const SocialAids = () => {
-  const { activeTab, setActiveTab, showNotAvailableMessage } = useSocialAids();
+  const { 
+    activeTab, 
+    setActiveTab, 
+    showNotAvailableMessage, 
+    selectedAidCategory, 
+    handleAidSelection,
+    isSubmitting,
+    submitAidRequest 
+  } = useSocialAids();
 
   return (
     <>
@@ -22,7 +30,7 @@ const SocialAids = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SocialAidsHeader />
 
-          <Tabs defaultValue="overview" className="space-y-8" onValueChange={setActiveTab}>
+          <Tabs defaultValue="overview" className="space-y-8" onValueChange={setActiveTab} value={activeTab}>
             <div className="flex justify-center">
               <TabsList className="grid grid-cols-1 md:grid-cols-3 w-full max-w-2xl">
                 <TabsTrigger value="overview" className="flex gap-2 items-center">
@@ -41,19 +49,25 @@ const SocialAids = () => {
             </div>
 
             <TabsContent value="overview">
-              <SocialAidsList onActionClick={showNotAvailableMessage} />
+              <SocialAidsList onActionClick={handleAidSelection} />
             </TabsContent>
 
             <TabsContent value="myrequests">
               <PendingRequestsList 
                 onDetailsClick={showNotAvailableMessage}
                 onHistoryClick={showNotAvailableMessage}
-                onNewRequestClick={showNotAvailableMessage}
+                onNewRequestClick={() => setActiveTab('newrequest')}
               />
             </TabsContent>
 
             <TabsContent value="newrequest">
-              <NewRequestForm onAidClick={showNotAvailableMessage} />
+              <NewRequestForm 
+                onAidClick={handleAidSelection} 
+                selectedAidCategory={selectedAidCategory} 
+                onBackClick={() => setActiveTab('overview')} 
+                onSubmit={submitAidRequest}
+                isSubmitting={isSubmitting}
+              />
             </TabsContent>
           </Tabs>
 

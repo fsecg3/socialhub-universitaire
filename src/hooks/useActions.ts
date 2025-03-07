@@ -6,6 +6,7 @@ const useActions = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
+  // Cette fonction gère les actions liées à la santé
   const handleHealthAction = async (action: string, serviceId?: string, payload?: any) => {
     setIsLoading(true);
     
@@ -84,9 +85,43 @@ const useActions = () => {
     }
   };
 
+  // Ajout de cette fonction pour gérer les actions génériques (utilisée par ActivitiesList)
+  const handleAction = async (action: string, description?: string) => {
+    setIsLoading(true);
+    
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    try {
+      toast({
+        title: "Action effectuée",
+        description: description || `Vous avez effectué l'action: ${action}`,
+      });
+    } catch (error) {
+      console.error("Error handling action:", error);
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue. Veuillez réessayer plus tard.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Ajout de cette fonction (utilisée par useActivities)
+  const showNotAvailableMessage = () => {
+    toast({
+      title: "Fonctionnalité à venir",
+      description: "Cette fonctionnalité sera disponible prochainement.",
+      duration: 3000,
+    });
+  };
+
   return {
     isLoading,
-    handleHealthAction
+    handleHealthAction,
+    handleAction,
+    showNotAvailableMessage
   };
 };
 

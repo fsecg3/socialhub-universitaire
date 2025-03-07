@@ -6,11 +6,7 @@ import useActions from '@/hooks/useActions';
 const useActivities = () => {
   const [activeTab, setActiveTab] = useState('sports');
   const { toast } = useToast();
-  const { showNotAvailableMessage: actionShowNotAvailableMessage } = useActions();
-
-  const showNotAvailableMessage = () => {
-    actionShowNotAvailableMessage();
-  };
+  const { showNotAvailableMessage } = useActions();
 
   return {
     activeTab,

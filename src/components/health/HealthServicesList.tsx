@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,22 +14,14 @@ import {
   AlertCircle
 } from 'lucide-react';
 import FadeIn from '@/components/animations/FadeIn';
-import { useToast } from '@/hooks/use-toast';
+import useActions from '@/hooks/useActions';
 
 const HealthServicesList = () => {
-  const { toast } = useToast();
+  const { handleHealthAction, isLoading } = useActions();
   const [expandedService, setExpandedService] = useState<string | null>(null);
 
   const toggleExpand = (serviceId: string) => {
     setExpandedService(expandedService === serviceId ? null : serviceId);
-  };
-
-  const showNotAvailableMessage = () => {
-    toast({
-      title: "Fonctionnalité à venir",
-      description: "Cette fonctionnalité sera disponible prochainement.",
-      duration: 3000,
-    });
   };
 
   const healthServices = [
@@ -207,7 +198,11 @@ const HealthServicesList = () => {
               )}
             </CardContent>
             <CardFooter className="p-6 pt-0 mt-auto">
-              <Button className="w-full" onClick={showNotAvailableMessage}>
+              <Button 
+                className="w-full" 
+                onClick={() => handleHealthAction('service-access', service.id)}
+                disabled={isLoading}
+              >
                 {service.action}
               </Button>
             </CardFooter>

@@ -1,11 +1,13 @@
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import FadeIn from '@/components/animations/FadeIn';
 import useActions from '@/hooks/useActions';
+import { MessageSquare } from 'lucide-react';
 
 const HealthFAQ = () => {
-  const { handleAction, isLoading } = useActions();
+  const { handleHealthAction, isLoading } = useActions();
 
   const faqs = [
     {
@@ -48,10 +50,11 @@ const HealthFAQ = () => {
         <CardFooter>
           <Button 
             variant="outline" 
-            className="w-full" 
-            onClick={() => handleAction("Nouvelle question", "Votre question a été enregistrée")}
+            className="w-full gap-2" 
+            onClick={() => handleHealthAction('question-submit')}
             disabled={isLoading}
           >
+            <MessageSquare className="h-4 w-4" />
             Poser une question
           </Button>
         </CardFooter>

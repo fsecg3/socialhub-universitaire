@@ -1,12 +1,12 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { HeartPulse } from 'lucide-react';
+import { HeartPulse, Phone } from 'lucide-react';
 import FadeIn from '@/components/animations/FadeIn';
 import useActions from '@/hooks/useActions';
 
 const EmergencyContact = () => {
-  const { handleAction, isLoading } = useActions();
+  const { handleHealthAction, isLoading } = useActions();
 
   return (
     <FadeIn className="mt-16">
@@ -22,15 +22,16 @@ const EmergencyContact = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button 
-                className="bg-gradient-to-r from-primary to-blue-500" 
-                onClick={() => handleAction("Contact médecin", "Un médecin vous contactera dans les plus brefs délais")}
+                className="bg-gradient-to-r from-primary to-blue-500 gap-2" 
+                onClick={() => handleHealthAction('contact-doctor')}
                 disabled={isLoading}
               >
+                <Phone className="h-4 w-4" />
                 Contacter un médecin
               </Button>
               <Button 
                 variant="outline" 
-                onClick={() => handleAction("Numéros d'urgence", "Voici les numéros d'urgence")}
+                onClick={() => handleHealthAction('emergency-numbers')}
                 disabled={isLoading}
               >
                 Numéros d{"'"}urgence

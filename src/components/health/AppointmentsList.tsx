@@ -2,15 +2,16 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calendar } from 'lucide-react';
+import { Calendar, Clock, MapPin } from 'lucide-react';
 import FadeIn from '@/components/animations/FadeIn';
 import useActions from '@/hooks/useActions';
 
 const AppointmentsList = () => {
-  const { handleAction, isLoading } = useActions();
+  const { handleHealthAction, isLoading } = useActions();
 
   const upcomingAppointments = [
     {
+      id: "APT-2024-0123",
       date: "15 Juin 2024",
       time: "10:30",
       doctor: "Dr. Bensalem",
@@ -18,6 +19,7 @@ const AppointmentsList = () => {
       location: "Centre Médical Universitaire"
     },
     {
+      id: "APT-2024-0145",
       date: "22 Juin 2024",
       time: "14:00",
       doctor: "Dr. Mansouri",
@@ -48,9 +50,14 @@ const AppointmentsList = () => {
                       <h3 className="font-medium">{appointment.doctor}</h3>
                       <p className="text-sm text-muted-foreground">{appointment.specialty}</p>
                       <div className="flex items-center gap-2 text-sm mt-1">
+                        <Calendar className="w-3 h-3" />
                         <span>{appointment.date}</span>
-                        <span>•</span>
+                        <Clock className="w-3 h-3 ml-2" />
                         <span>{appointment.time}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm mt-1">
+                        <MapPin className="w-3 h-3" />
+                        <span>{appointment.location}</span>
                       </div>
                     </div>
                   </div>
@@ -59,7 +66,7 @@ const AppointmentsList = () => {
                       variant="outline" 
                       size="sm" 
                       className="flex-1 md:flex-initial"
-                      onClick={() => handleAction("Modification du rendez-vous", `Modification du rendez-vous avec ${appointment.doctor}`)}
+                      onClick={() => handleHealthAction('appointment-modification', `Modification du rendez-vous ${appointment.id}`)}
                       disabled={isLoading}
                     >
                       Modifier
@@ -68,7 +75,7 @@ const AppointmentsList = () => {
                       variant="destructive" 
                       size="sm" 
                       className="flex-1 md:flex-initial"
-                      onClick={() => handleAction("Annulation du rendez-vous", `Annulation du rendez-vous avec ${appointment.doctor}`)}
+                      onClick={() => handleHealthAction('appointment-cancellation', `Annulation du rendez-vous ${appointment.id}`)}
                       disabled={isLoading}
                     >
                       Annuler
@@ -86,13 +93,13 @@ const AppointmentsList = () => {
         <CardFooter className="flex justify-between">
           <Button 
             variant="outline"
-            onClick={() => handleAction("Historique des rendez-vous", "Voici l'historique de vos rendez-vous")}
+            onClick={() => handleHealthAction('appointment-history')}
             disabled={isLoading}
           >
             Historique
           </Button>
           <Button 
-            onClick={() => handleAction("Prise de rendez-vous", "Vous allez être redirigé vers le formulaire de prise de rendez-vous")}
+            onClick={() => handleHealthAction('appointment-booking')}
             disabled={isLoading}
           >
             Prendre rendez-vous

@@ -4,9 +4,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button';
 import FadeIn from '@/components/animations/FadeIn';
 import useActions from '@/hooks/useActions';
+import { FileText, Calendar, CircleDollarSign } from 'lucide-react';
 
 const ReimbursementsList = () => {
-  const { handleAction, isLoading } = useActions();
+  const { handleHealthAction, isLoading } = useActions();
 
   const pendingReimbursements = [
     {
@@ -65,7 +66,7 @@ const ReimbursementsList = () => {
                           <Button 
                             variant="ghost" 
                             size="sm" 
-                            onClick={() => handleAction("Consultation des détails", `Détails du remboursement ${reimbursement.id}`)}
+                            onClick={() => handleHealthAction('reimbursement-detail', reimbursement.id)}
                             disabled={isLoading}
                           >
                             Détails
@@ -86,13 +87,13 @@ const ReimbursementsList = () => {
         <CardFooter className="flex justify-between">
           <Button 
             variant="outline" 
-            onClick={() => handleAction("Consultation de l'historique", "Historique des remboursements")}
+            onClick={() => handleHealthAction('reimbursement-history')}
             disabled={isLoading}
           >
             Historique
           </Button>
           <Button 
-            onClick={() => handleAction("Nouvelle demande", "Demande de remboursement")}
+            onClick={() => handleHealthAction('reimbursement-request')}
             disabled={isLoading}
           >
             Nouvelle demande

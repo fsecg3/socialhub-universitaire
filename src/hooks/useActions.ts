@@ -2,233 +2,90 @@
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
-// Types d'actions disponibles dans l'application
-export type ActionType = 
-  | 'contact-doctor' 
-  | 'emergency-numbers' 
-  | 'appointment-booking'
-  | 'appointment-modification'
-  | 'appointment-cancellation'
-  | 'appointment-history'
-  | 'reimbursement-request'
-  | 'reimbursement-detail'
-  | 'reimbursement-history'
-  | 'question-submit'
-  | 'service-access';
-
-// Résultats possibles d'une action
-export type ActionResult = {
-  success: boolean;
-  message: string;
-  data?: any;
-};
-
 const useActions = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [lastActionResult, setLastActionResult] = useState<ActionResult | null>(null);
   const { toast } = useToast();
 
-  const showNotAvailableMessage = () => {
-    toast({
-      title: "Fonctionnalité à venir",
-      description: "Cette fonctionnalité sera disponible prochainement.",
-      duration: 3000,
-    });
-  };
-
-  // Simule le traitement d'une action médicale avec un résultat
-  const handleHealthAction = (actionType: ActionType, actionDetails?: string) => {
+  const handleHealthAction = async (action: string, serviceId?: string, payload?: any) => {
     setIsLoading(true);
     
-    // Délai simulé pour le traitement
-    const processingTime = Math.floor(Math.random() * 1000) + 500; // Entre 500ms et 1500ms
+    // Simuler un délai réseau
+    await new Promise(resolve => setTimeout(resolve, 1500));
     
-    setTimeout(() => {
-      let result: ActionResult;
-      
-      // Logique spécifique à chaque type d'action
-      switch(actionType) {
+    try {
+      switch (action) {
         case 'contact-doctor':
-          result = {
-            success: true,
-            message: "Un médecin vous contactera dans les prochaines 30 minutes",
-            data: {
-              referenceId: `MED-${Date.now()}`,
-              estimatedResponseTime: "30 minutes",
-              priority: "Normale"
-            }
-          };
+          toast({
+            title: "Demande de contact envoyée",
+            description: "Un médecin vous contactera dans les plus brefs délais.",
+          });
           break;
-          
+        
         case 'emergency-numbers':
-          result = {
-            success: true,
-            message: "Voici les numéros d'urgence",
-            data: {
-              samu: "14",
-              police: "17",
-              pompiers: "14",
-              urgencesMédicales: "115",
-              centreDeSanté: "0561234567"
-            }
-          };
+          toast({
+            title: "Numéros d'urgence",
+            description: "SAMU: 115, Police: 17, Pompiers: 14, Urgence européen: 112",
+          });
           break;
-          
-        case 'appointment-booking':
-          result = {
-            success: true,
-            message: "Votre demande de rendez-vous a été enregistrée",
-            data: {
-              appointmentId: `APT-${Date.now()}`,
-              status: "En attente de confirmation"
-            }
-          };
-          break;
-          
-        case 'appointment-modification':
-          result = {
-            success: true,
-            message: "Votre demande de modification a été prise en compte",
-            data: {
-              appointmentId: actionDetails?.split(" ").pop() || `APT-${Date.now()}`,
-              status: "En cours de traitement"
-            }
-          };
-          break;
-          
-        case 'appointment-cancellation':
-          result = {
-            success: true,
-            message: "Votre rendez-vous a été annulé avec succès",
-            data: {
-              appointmentId: actionDetails?.split(" ").pop() || `APT-${Date.now()}`,
-              status: "Annulé",
-              refundPolicy: "Aucun frais d'annulation ne sera appliqué"
-            }
-          };
-          break;
-          
-        case 'appointment-history':
-          result = {
-            success: true,
-            message: "Historique de vos rendez-vous",
-            data: {
-              totalAppointments: 5,
-              completedAppointments: 3,
-              cancelledAppointments: 1,
-              pendingAppointments: 1
-            }
-          };
-          break;
-          
-        case 'reimbursement-request':
-          result = {
-            success: true,
-            message: "Votre demande de remboursement a été enregistrée",
-            data: {
-              referenceId: `RMB-${Date.now()}`,
-              submissionDate: new Date().toLocaleDateString('fr-FR'),
-              status: "Soumise",
-              estimatedProcessingTime: "7 jours ouvrables"
-            }
-          };
-          break;
-          
-        case 'reimbursement-detail':
-          result = {
-            success: true,
-            message: `Détails du remboursement ${actionDetails}`,
-            data: {
-              referenceId: actionDetails || `RMB-${Date.now()}`,
-              submissionDate: new Date().toLocaleDateString('fr-FR', { month: 'long', day: 'numeric', year: 'numeric' }),
-              amount: `${Math.floor(Math.random() * 10000) + 1000} DA`,
-              status: "En cours de traitement",
-              documents: ["Facture.pdf", "Ordonnance.pdf"],
-              comments: "Traitement en cours par l'équipe financière"
-            }
-          };
-          break;
-          
-        case 'reimbursement-history':
-          result = {
-            success: true,
-            message: "Historique des remboursements",
-            data: {
-              totalRequests: 8,
-              approvedRequests: 5,
-              pendingRequests: 2,
-              rejectedRequests: 1,
-              totalReimbursed: `${Math.floor(Math.random() * 50000) + 10000} DA`
-            }
-          };
-          break;
-          
+        
         case 'question-submit':
-          result = {
-            success: true,
-            message: "Votre question a été enregistrée",
-            data: {
-              ticketId: `FAQ-${Date.now()}`,
-              estimatedResponseTime: "24-48 heures",
-              category: "Général"
-            }
-          };
+          toast({
+            title: "Question envoyée",
+            description: "Nous vous répondrons sous 24 à 48 heures.",
+          });
           break;
           
         case 'service-access':
-          result = {
-            success: true,
-            message: `Accès au service ${actionDetails}`,
-            data: {
-              serviceId: actionDetails,
-              status: "Ouvert",
-              availableSlots: Math.floor(Math.random() * 10) + 1
-            }
-          };
+          toast({
+            title: "Accès au service",
+            description: `Vous accédez au service: ${serviceId}`,
+          });
+          break;
+          
+        case 'appointment-book':
+          toast({
+            title: "Rendez-vous",
+            description: "Votre demande de rendez-vous a été enregistrée.",
+          });
+          break;
+          
+        case 'reimbursement-track':
+          toast({
+            title: "Suivi de remboursement",
+            description: "Votre demande est en cours de traitement.",
+          });
+          break;
+          
+        case 'service-request-submit':
+          console.log("Form submitted:", { serviceId, payload });
+          toast({
+            title: "Demande envoyée",
+            description: "Votre demande de service a été soumise avec succès. Un conseiller vous contactera prochainement.",
+            duration: 5000,
+          });
           break;
           
         default:
-          result = {
-            success: true,
-            message: actionDetails || "Action traitée avec succès",
-            data: {
-              timestamp: new Date().toISOString()
-            }
-          };
+          toast({
+            title: "Action non reconnue",
+            description: "Cette fonctionnalité n'est pas encore disponible.",
+            variant: "destructive",
+          });
       }
-      
-      // Mettre à jour l'état et afficher le toast
-      setLastActionResult(result);
-      setIsLoading(false);
-      
+    } catch (error) {
+      console.error("Error handling health action:", error);
       toast({
-        title: result.success ? "Action réussie" : "Action échouée",
-        description: result.message,
-        duration: 5000,
+        title: "Erreur",
+        description: "Une erreur est survenue. Veuillez réessayer plus tard.",
+        variant: "destructive",
       });
-    }, processingTime);
-  };
-
-  const handleAction = (actionType: string, customMessage?: string) => {
-    setIsLoading(true);
-    
-    // Simuler une action avec un délai
-    setTimeout(() => {
+    } finally {
       setIsLoading(false);
-      
-      toast({
-        title: customMessage || "Action effectuée",
-        description: `L'action ${actionType} a été traitée avec succès.`,
-        duration: 3000,
-      });
-    }, 1000);
+    }
   };
 
   return {
     isLoading,
-    lastActionResult,
-    showNotAvailableMessage,
-    handleAction,
     handleHealthAction
   };
 };

@@ -11,10 +11,11 @@ import AppointmentsList from '@/components/health/AppointmentsList';
 import ReimbursementsList from '@/components/health/ReimbursementsList';
 import HealthFAQ from '@/components/health/HealthFAQ';
 import EmergencyContact from '@/components/health/EmergencyContact';
+import HealthServiceForm from '@/components/health/HealthServiceForm';
 import useHealthServices from '@/hooks/useHealthServices';
 
 const Health = () => {
-  const { activeTab, setActiveTab } = useHealthServices();
+  const { activeTab, setActiveTab, selectedService, setSelectedService, serviceDetails } = useHealthServices();
 
   return (
     <>
@@ -46,7 +47,15 @@ const Health = () => {
             </div>
 
             <TabsContent value="services">
-              <HealthServicesList />
+              {selectedService ? (
+                <HealthServiceForm 
+                  serviceId={selectedService} 
+                  serviceDetails={serviceDetails[selectedService]} 
+                  onBack={() => setSelectedService(null)} 
+                />
+              ) : (
+                <HealthServicesList onServiceSelect={setSelectedService} />
+              )}
             </TabsContent>
 
             <TabsContent value="appointments">

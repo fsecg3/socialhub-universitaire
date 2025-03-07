@@ -46,9 +46,11 @@ const useHealthServices = () => {
         'Gestion des urgences'
       ],
       documents: [
-        'Devis médical',
-        'Rapport chirurgical',
-        'Factures'
+        'Devis médical*',
+        'Rapport chirurgical*',
+        'Factures',
+        'Carte d\'identité*',
+        'Ordonnance médicale*'
       ],
       estimatedProcessingTime: '3 à 5 jours ouvrables',
       coveragePercentage: 'Jusqu\'à 80%',
@@ -65,8 +67,11 @@ const useHealthServices = () => {
         'Suivi personnalisé'
       ],
       documents: [
-        'Carte d\'invalidité',
-        'Certificat médical détaillé'
+        'Carte d\'invalidité*',
+        'Certificat médical détaillé*',
+        'Justificatif de domicile',
+        'Pièce d\'identité*',
+        'RIB bancaire*'
       ],
       estimatedProcessingTime: '7 à 14 jours ouvrables',
       coveragePercentage: 'Jusqu\'à 100%',
@@ -83,9 +88,11 @@ const useHealthServices = () => {
         'Alertes médicales'
       ],
       documents: [
-        'Protocole de traitement',
-        'Ordonnances',
-        'Comptes-rendus médicaux'
+        'Protocole de traitement*',
+        'Ordonnances*',
+        'Comptes-rendus médicaux*',
+        'Historique médical',
+        'Carte d\'assuré*'
       ],
       estimatedProcessingTime: '5 jours ouvrables',
       coveragePercentage: '90% à 100%',
@@ -102,9 +109,11 @@ const useHealthServices = () => {
         'Historique des remboursements'
       ],
       documents: [
-        'Facture optique',
-        'Ordonnance',
-        'Prescription médicale'
+        'Facture optique*',
+        'Ordonnance*',
+        'Prescription médicale*',
+        'Carte d\'assuré',
+        'Justificatif de correction antérieure'
       ],
       estimatedProcessingTime: '3 jours ouvrables',
       coveragePercentage: '50% à 75%',
@@ -121,9 +130,11 @@ const useHealthServices = () => {
         'Traçabilité'
       ],
       documents: [
-        'Factures',
-        'Comptes-rendus',
-        'Ordonnances'
+        'Factures*',
+        'Comptes-rendus*',
+        'Ordonnances*',
+        'Résultats d\'analyses',
+        'Carte d\'assuré*'
       ],
       estimatedProcessingTime: '2 à 5 jours ouvrables',
       coveragePercentage: '60% à 100%',
@@ -139,7 +150,12 @@ const useHealthServices = () => {
         'Annuaire médical',
         'Évaluation des praticiens'
       ],
-      documents: [],
+      documents: [
+        'Carte d\'assuré*',
+        'Pièce d\'identité*',
+        'Justificatif de domicile',
+        'RIB bancaire*'
+      ],
       estimatedProcessingTime: 'Immédiat',
       coveragePercentage: '70% à 100%',
       maximumAmount: 'Selon convention'

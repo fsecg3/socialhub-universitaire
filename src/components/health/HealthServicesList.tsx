@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,8 +16,13 @@ import {
 } from 'lucide-react';
 import FadeIn from '@/components/animations/FadeIn';
 import useActions from '@/hooks/useActions';
+import { HealthServiceCategory } from '@/hooks/useHealthServices';
 
-const HealthServicesList = () => {
+interface HealthServicesListProps {
+  onServiceSelect: (serviceId: HealthServiceCategory) => void;
+}
+
+const HealthServicesList: React.FC<HealthServicesListProps> = ({ onServiceSelect }) => {
   const { handleHealthAction, isLoading } = useActions();
   const [expandedService, setExpandedService] = useState<string | null>(null);
 
@@ -200,8 +206,7 @@ const HealthServicesList = () => {
             <CardFooter className="p-6 pt-0 mt-auto">
               <Button 
                 className="w-full" 
-                onClick={() => handleHealthAction('service-access', service.id)}
-                disabled={isLoading}
+                onClick={() => onServiceSelect(service.id as HealthServiceCategory)}
               >
                 {service.action}
               </Button>

@@ -9,9 +9,10 @@ import NotFound from "./pages/NotFound";
 import Health from "./pages/Health";
 import SocialAids from "./pages/SocialAids";
 import Loans from "./pages/Loans";
-// Import new pages when they are created
-// import SpecialServices from "./pages/SpecialServices";
-// import Activities from "./pages/Activities";
+import Accidents from "./pages/Accidents";
+import Pilgrimage from "./pages/Pilgrimage";
+import Recreation from "./pages/Recreation";
+import Activities from "./pages/Activities";
 
 const queryClient = new QueryClient();
 
@@ -27,9 +28,12 @@ const App = () => (
           <Route path="/dining" element={<NotFound />} />
           <Route path="/scholarships" element={<SocialAids />} />
           <Route path="/health" element={<Health />} />
-          <Route path="/activities" element={<NotFound />} />
+          <Route path="/activities" element={<Activities />} />
           <Route path="/services" element={<NotFound />} />
           <Route path="/loans" element={<Loans />} />
+          <Route path="/accidents" element={<Accidents />} />
+          <Route path="/pilgrimage" element={<Pilgrimage />} />
+          <Route path="/recreation" element={<Recreation />} />
           <Route path="/special-services" element={<NotFound />} />
           <Route path="/privacy" element={<NotFound />} />
           <Route path="/terms" element={<NotFound />} />

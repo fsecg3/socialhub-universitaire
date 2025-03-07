@@ -4,18 +4,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button';
 import { Calendar } from 'lucide-react';
 import FadeIn from '@/components/animations/FadeIn';
-import { useToast } from '@/hooks/use-toast';
+import useActions from '@/hooks/useActions';
 
 const AppointmentsList = () => {
-  const { toast } = useToast();
-
-  const showNotAvailableMessage = () => {
-    toast({
-      title: "Fonctionnalité à venir",
-      description: "Cette fonctionnalité sera disponible prochainement.",
-      duration: 3000,
-    });
-  };
+  const { handleAction, isLoading } = useActions();
 
   const upcomingAppointments = [
     {
@@ -63,10 +55,22 @@ const AppointmentsList = () => {
                     </div>
                   </div>
                   <div className="flex gap-2 w-full md:w-auto">
-                    <Button variant="outline" size="sm" className="flex-1 md:flex-initial" onClick={showNotAvailableMessage}>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex-1 md:flex-initial"
+                      onClick={() => handleAction("Modification du rendez-vous", `Modification du rendez-vous avec ${appointment.doctor}`)}
+                      disabled={isLoading}
+                    >
                       Modifier
                     </Button>
-                    <Button variant="destructive" size="sm" className="flex-1 md:flex-initial" onClick={showNotAvailableMessage}>
+                    <Button 
+                      variant="destructive" 
+                      size="sm" 
+                      className="flex-1 md:flex-initial"
+                      onClick={() => handleAction("Annulation du rendez-vous", `Annulation du rendez-vous avec ${appointment.doctor}`)}
+                      disabled={isLoading}
+                    >
                       Annuler
                     </Button>
                   </div>
@@ -80,8 +84,19 @@ const AppointmentsList = () => {
           )}
         </CardContent>
         <CardFooter className="flex justify-between">
-          <Button variant="outline" onClick={showNotAvailableMessage}>Historique</Button>
-          <Button onClick={showNotAvailableMessage}>Prendre rendez-vous</Button>
+          <Button 
+            variant="outline"
+            onClick={() => handleAction("Historique des rendez-vous", "Voici l'historique de vos rendez-vous")}
+            disabled={isLoading}
+          >
+            Historique
+          </Button>
+          <Button 
+            onClick={() => handleAction("Prise de rendez-vous", "Vous allez être redirigé vers le formulaire de prise de rendez-vous")}
+            disabled={isLoading}
+          >
+            Prendre rendez-vous
+          </Button>
         </CardFooter>
       </Card>
     </FadeIn>

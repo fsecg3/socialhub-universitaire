@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Volleyball, Theater, Beaker } from 'lucide-react';
 import FadeIn from '@/components/animations/FadeIn';
 import useActivities from '@/hooks/useActivities';
+import useActions from '@/hooks/useActions';
 
 interface ActivitiesListProps {
   category?: string;
@@ -13,12 +14,13 @@ interface ActivitiesListProps {
 
 const ActivitiesList: React.FC<ActivitiesListProps> = ({ category, onActionClick }) => {
   const { showNotAvailableMessage } = useActivities();
+  const { handleAction, isLoading } = useActions();
   
-  const handleAction = () => {
+  const handleActivityAction = (activityTitle: string, actionType: string) => {
     if (onActionClick) {
       onActionClick();
     } else {
-      showNotAvailableMessage();
+      handleAction(actionType, `${actionType} pour "${activityTitle}"`);
     }
   };
 
@@ -88,7 +90,12 @@ const ActivitiesList: React.FC<ActivitiesListProps> = ({ category, onActionClick
               <CardDescription className="text-base">{activity.description}</CardDescription>
             </CardContent>
             <CardFooter className="p-6 pt-0">
-              <Button variant="outline" className="w-full" onClick={handleAction}>
+              <Button 
+                variant="outline" 
+                className="w-full" 
+                onClick={() => handleActivityAction(activity.title, activity.action)}
+                disabled={isLoading}
+              >
                 {activity.action}
               </Button>
             </CardFooter>

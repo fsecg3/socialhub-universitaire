@@ -3,18 +3,10 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import FadeIn from '@/components/animations/FadeIn';
-import { useToast } from '@/hooks/use-toast';
+import useActions from '@/hooks/useActions';
 
 const ReimbursementsList = () => {
-  const { toast } = useToast();
-
-  const showNotAvailableMessage = () => {
-    toast({
-      title: "Fonctionnalité à venir",
-      description: "Cette fonctionnalité sera disponible prochainement.",
-      duration: 3000,
-    });
-  };
+  const { handleAction, isLoading } = useActions();
 
   const pendingReimbursements = [
     {
@@ -70,7 +62,12 @@ const ReimbursementsList = () => {
                           </span>
                         </td>
                         <td className="p-3">
-                          <Button variant="ghost" size="sm" onClick={showNotAvailableMessage}>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={() => handleAction("Consultation des détails", `Détails du remboursement ${reimbursement.id}`)}
+                            disabled={isLoading}
+                          >
                             Détails
                           </Button>
                         </td>
@@ -87,8 +84,19 @@ const ReimbursementsList = () => {
           )}
         </CardContent>
         <CardFooter className="flex justify-between">
-          <Button variant="outline" onClick={showNotAvailableMessage}>Historique</Button>
-          <Button onClick={showNotAvailableMessage}>Nouvelle demande</Button>
+          <Button 
+            variant="outline" 
+            onClick={() => handleAction("Consultation de l'historique", "Historique des remboursements")}
+            disabled={isLoading}
+          >
+            Historique
+          </Button>
+          <Button 
+            onClick={() => handleAction("Nouvelle demande", "Demande de remboursement")}
+            disabled={isLoading}
+          >
+            Nouvelle demande
+          </Button>
         </CardFooter>
       </Card>
     </FadeIn>

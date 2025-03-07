@@ -3,18 +3,10 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { HeartPulse } from 'lucide-react';
 import FadeIn from '@/components/animations/FadeIn';
-import { useToast } from '@/hooks/use-toast';
+import useActions from '@/hooks/useActions';
 
 const EmergencyContact = () => {
-  const { toast } = useToast();
-
-  const showNotAvailableMessage = () => {
-    toast({
-      title: "Fonctionnalité à venir",
-      description: "Cette fonctionnalité sera disponible prochainement.",
-      duration: 3000,
-    });
-  };
+  const { handleAction, isLoading } = useActions();
 
   return (
     <FadeIn className="mt-16">
@@ -29,10 +21,18 @@ const EmergencyContact = () => {
               en cas d{"'"}urgence ou pour toute question relative à votre santé.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button className="bg-gradient-to-r from-primary to-blue-500" onClick={showNotAvailableMessage}>
+              <Button 
+                className="bg-gradient-to-r from-primary to-blue-500" 
+                onClick={() => handleAction("Contact médecin", "Un médecin vous contactera dans les plus brefs délais")}
+                disabled={isLoading}
+              >
                 Contacter un médecin
               </Button>
-              <Button variant="outline" onClick={showNotAvailableMessage}>
+              <Button 
+                variant="outline" 
+                onClick={() => handleAction("Numéros d'urgence", "Voici les numéros d'urgence")}
+                disabled={isLoading}
+              >
                 Numéros d{"'"}urgence
               </Button>
             </div>

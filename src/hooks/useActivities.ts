@@ -1,17 +1,15 @@
 
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import useActions from '@/hooks/useActions';
 
 const useActivities = () => {
   const [activeTab, setActiveTab] = useState('sports');
   const { toast } = useToast();
+  const { showNotAvailableMessage: actionShowNotAvailableMessage } = useActions();
 
   const showNotAvailableMessage = () => {
-    toast({
-      title: "Fonctionnalité à venir",
-      description: "Cette fonctionnalité sera disponible prochainement.",
-      duration: 3000,
-    });
+    actionShowNotAvailableMessage();
   };
 
   return {

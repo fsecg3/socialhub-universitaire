@@ -1,20 +1,11 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import FadeIn from '@/components/animations/FadeIn';
-import { useToast } from '@/hooks/use-toast';
+import useActions from '@/hooks/useActions';
 
 const HealthFAQ = () => {
-  const { toast } = useToast();
-
-  const showNotAvailableMessage = () => {
-    toast({
-      title: "Fonctionnalité à venir",
-      description: "Cette fonctionnalité sera disponible prochainement.",
-      duration: 3000,
-    });
-  };
+  const { handleAction, isLoading } = useActions();
 
   const faqs = [
     {
@@ -55,7 +46,12 @@ const HealthFAQ = () => {
           </div>
         </CardContent>
         <CardFooter>
-          <Button variant="outline" className="w-full" onClick={showNotAvailableMessage}>
+          <Button 
+            variant="outline" 
+            className="w-full" 
+            onClick={() => handleAction("Nouvelle question", "Votre question a été enregistrée")}
+            disabled={isLoading}
+          >
             Poser une question
           </Button>
         </CardFooter>

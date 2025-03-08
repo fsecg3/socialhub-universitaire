@@ -6,36 +6,41 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { FileIcon, Upload, ArrowLeft } from 'lucide-react';
+import { FileIcon, Upload, ArrowLeft, Calendar, MapPin, UserIcon, Phone, Mail } from 'lucide-react';
+import { ActivityCategory } from '@/hooks/useActivities';
 import FadeIn from '@/components/animations/FadeIn';
-import useActions from '@/hooks/useActions';
 
 interface ActivityRegistrationFormProps {
-  activityType: string;
+  activityType: ActivityCategory;
   activityTitle: string;
   description: string;
-  onBackClick: () => void;
   requiredDocuments?: Array<{name: string, required: boolean}>;
+  onBackClick: () => void;
+  onSubmit: (formData: any) => void;
+  uploadedDocuments: Record<string, boolean>;
+  onDocumentUpload: (documentName: string) => void;
 }
 
-const ActivityRegistrationForm: React.FC<ActivityRegistrationFormProps> = ({ 
+const ActivityRegistrationForm: React.FC<ActivityRegistrationFormProps> = ({
   activityType,
   activityTitle,
   description,
+  requiredDocuments = [],
   onBackClick,
-  requiredDocuments = []
+  onSubmit,
+  uploadedDocuments,
+  onDocumentUpload
 }) => {
-  const { handleAction, isLoading } = useActions();
   const [formState, setFormState] = useState({
     fullName: '',
     email: '',
     phone: '',
+    birthDate: '',
     studentId: '',
+    address: '',
     additionalInfo: '',
     agreeToTerms: false
   });
-  
-  const [uploadedDocuments, setUploadedDocuments] = useState<Record<string, boolean>>({});
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -48,30 +53,21 @@ const ActivityRegistrationForm: React.FC<ActivityRegistrationFormProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    handleAction('activity-registration', `Inscription à ${activityTitle}`);
-    onBackClick();
+    onSubmit(formState);
   };
 
-  const simulateFileUpload = (documentName: string) => {
-    setUploadedDocuments(prev => ({ ...prev, [documentName]: true }));
-  };
+  // Calculate if all required documents are uploaded
+  const requiredDocumentsUploaded = requiredDocuments
+    .filter(doc => doc.required)
+    .every(doc => uploadedDocuments[doc.name]);
 
-  const isFormComplete = () => {
-    if (!formState.agreeToTerms || !formState.fullName || !formState.email || !formState.phone) {
-      return false;
-    }
-    
-    // Check if all required documents are uploaded
-    if (requiredDocuments.length > 0) {
-      const requiredDocsNotUploaded = requiredDocuments
-        .filter(doc => doc.required)
-        .some(doc => !uploadedDocuments[doc.name]);
-        
-      if (requiredDocsNotUploaded) return false;
-    }
-    
-    return true;
-  };
+  // Check if form is valid
+  const isFormValid = 
+    formState.fullName.trim() !== '' && 
+    formState.email.trim() !== '' && 
+    formState.phone.trim() !== '' && 
+    formState.agreeToTerms && 
+    requiredDocumentsUploaded;
 
   return (
     <FadeIn>
@@ -88,9 +84,7 @@ const ActivityRegistrationForm: React.FC<ActivityRegistrationFormProps> = ({
             </Button>
             <div>
               <CardTitle>Inscription à {activityTitle}</CardTitle>
-              <CardDescription>
-                {description}
-              </CardDescription>
+              <CardDescription>{description}</CardDescription>
             </div>
           </div>
         </CardHeader>
@@ -98,8 +92,11 @@ const ActivityRegistrationForm: React.FC<ActivityRegistrationFormProps> = ({
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <div>
-                  <Label htmlFor="fullName">Nom complet</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="fullName" className="flex items-center gap-1">
+                    <UserIcon className="h-4 w-4" />
+                    Nom complet
+                  </Label>
                   <Input 
                     id="fullName" 
                     name="fullName" 
@@ -109,8 +106,12 @@ const ActivityRegistrationForm: React.FC<ActivityRegistrationFormProps> = ({
                     onChange={handleInputChange}
                   />
                 </div>
-                <div>
-                  <Label htmlFor="email">Email</Label>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="flex items-center gap-1">
+                    <Mail className="h-4 w-4" />
+                    Email
+                  </Label>
                   <Input 
                     id="email" 
                     name="email" 
@@ -121,8 +122,12 @@ const ActivityRegistrationForm: React.FC<ActivityRegistrationFormProps> = ({
                     onChange={handleInputChange}
                   />
                 </div>
-                <div>
-                  <Label htmlFor="phone">Téléphone</Label>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="phone" className="flex items-center gap-1">
+                    <Phone className="h-4 w-4" />
+                    Téléphone
+                  </Label>
                   <Input 
                     id="phone" 
                     name="phone" 
@@ -132,22 +137,52 @@ const ActivityRegistrationForm: React.FC<ActivityRegistrationFormProps> = ({
                     onChange={handleInputChange}
                   />
                 </div>
-                <div>
-                  <Label htmlFor="studentId">Numéro d'étudiant ou d'employé</Label>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="birthDate" className="flex items-center gap-1">
+                    <Calendar className="h-4 w-4" />
+                    Date de naissance
+                  </Label>
+                  <Input 
+                    id="birthDate" 
+                    name="birthDate" 
+                    type="date" 
+                    value={formState.birthDate}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="studentId">Numéro d'étudiant / personnel</Label>
                   <Input 
                     id="studentId" 
                     name="studentId" 
-                    placeholder="Votre numéro d'identification" 
+                    placeholder="Votre identifiant universitaire" 
                     value={formState.studentId}
                     onChange={handleInputChange}
                   />
                 </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="address" className="flex items-center gap-1">
+                    <MapPin className="h-4 w-4" />
+                    Adresse
+                  </Label>
+                  <Input 
+                    id="address" 
+                    name="address" 
+                    placeholder="Votre adresse complète" 
+                    value={formState.address}
+                    onChange={handleInputChange}
+                  />
+                </div>
               </div>
-              {requiredDocuments.length > 0 && (
-                <div className="space-y-4">
-                  <h3 className="text-sm font-medium">Documents requis</h3>
-                  <div className="space-y-3 border rounded-lg p-4">
-                    {requiredDocuments.map((doc, index) => (
+              
+              <div className="space-y-4">
+                <h3 className="text-sm font-medium">Documents requis</h3>
+                <div className="space-y-3 border rounded-lg p-4">
+                  {requiredDocuments.length > 0 ? (
+                    requiredDocuments.map((doc, index) => (
                       <div key={index} className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <FileIcon className="h-4 w-4 text-muted-foreground" />
@@ -159,7 +194,7 @@ const ActivityRegistrationForm: React.FC<ActivityRegistrationFormProps> = ({
                           variant="outline" 
                           size="sm" 
                           className="h-8"
-                          onClick={() => simulateFileUpload(doc.name)}
+                          onClick={() => onDocumentUpload(doc.name)}
                         >
                           {uploadedDocuments[doc.name] ? (
                             <span className="text-green-500 flex items-center gap-1">
@@ -176,22 +211,31 @@ const ActivityRegistrationForm: React.FC<ActivityRegistrationFormProps> = ({
                           )}
                         </Button>
                       </div>
-                    ))}
-                  </div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-muted-foreground">Aucun document requis pour cette activité.</p>
+                  )}
                 </div>
-              )}
+                
+                <div className="space-y-2">
+                  <Label htmlFor="additionalInfo">Informations complémentaires</Label>
+                  <Textarea 
+                    id="additionalInfo" 
+                    name="additionalInfo" 
+                    placeholder="Précisez toute information utile (expérience préalable, besoins particuliers, etc.)" 
+                    rows={4}
+                    value={formState.additionalInfo}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                
+                <div className="bg-blue-50 p-3 rounded-md text-sm text-blue-700 border border-blue-100">
+                  <p>Les activités {activityType} nécessitent généralement une bonne condition physique et le respect des règles de sécurité.</p>
+                  <p className="mt-1">Pour toute question, contactez le service des activités universitaires.</p>
+                </div>
+              </div>
             </div>
-            <div>
-              <Label htmlFor="additionalInfo">Informations complémentaires</Label>
-              <Textarea 
-                id="additionalInfo" 
-                name="additionalInfo" 
-                placeholder="Précisez toute information complémentaire utile à votre demande" 
-                rows={4}
-                value={formState.additionalInfo}
-                onChange={handleInputChange}
-              />
-            </div>
+            
             <div className="flex items-start space-x-2">
               <Checkbox 
                 id="terms" 
@@ -200,7 +244,7 @@ const ActivityRegistrationForm: React.FC<ActivityRegistrationFormProps> = ({
                 required
               />
               <Label htmlFor="terms" className="text-sm leading-none pt-0.5">
-                Je certifie l{"'"}exactitude des informations fournies et j{"'"}accepte les conditions de participation aux activités.
+                Je certifie l{"'"}exactitude des informations fournies et j{"'"}accepte les conditions de participation aux activités universitaires.
               </Label>
             </div>
           </form>
@@ -214,19 +258,9 @@ const ActivityRegistrationForm: React.FC<ActivityRegistrationFormProps> = ({
           </Button>
           <Button 
             onClick={handleSubmit}
-            disabled={!isFormComplete() || isLoading}
+            disabled={!isFormValid}
           >
-            {isLoading ? (
-              <span className="flex items-center gap-2">
-                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Traitement en cours...
-              </span>
-            ) : (
-              "Soumettre l'inscription"
-            )}
+            Soumettre l'inscription
           </Button>
         </CardFooter>
       </Card>

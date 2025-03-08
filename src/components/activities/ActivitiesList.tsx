@@ -2,11 +2,13 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Volleyball, Theater, Beaker } from 'lucide-react';
+import { Volleyball, Theater, Beaker, Star } from 'lucide-react';
 import FadeIn from '@/components/animations/FadeIn';
 import useActivities, { ActivityCategory } from '@/hooks/useActivities';
 import useActions from '@/hooks/useActions';
 import ActivityRegistrationForm from './ActivityRegistrationForm';
+import ActivityRegistrationConfirmation from './ActivityRegistrationConfirmation';
+import ActivityRegistrationSuccess from './ActivityRegistrationSuccess';
 
 interface ActivitiesListProps {
   category?: ActivityCategory;
@@ -14,7 +16,19 @@ interface ActivitiesListProps {
 }
 
 const ActivitiesList: React.FC<ActivitiesListProps> = ({ category, onActionClick }) => {
-  const { showNotAvailableMessage, selectedActivity, setSelectedActivity } = useActivities();
+  const { 
+    showNotAvailableMessage, 
+    selectedActivity, 
+    setSelectedActivity,
+    favoriteActivities,
+    toggleFavorite,
+    registrationStep,
+    uploadedDocuments,
+    handleDocumentUpload,
+    submitRegistration,
+    confirmRegistration,
+    cancelRegistration
+  } = useActivities();
   const { handleAction, isLoading } = useActions();
   
   const handleActivityAction = (activityTitle: string, actionType: string) => {
@@ -105,26 +119,69 @@ const ActivitiesList: React.FC<ActivitiesListProps> = ({ category, onActionClick
     ? allActivities.filter(activity => activity.category === category)
     : allActivities;
 
+  // Add favorite status to activities
+  const activitiesWithFavorites = activities.map(activity => ({
+    ...activity,
+    isFavorite: favoriteActivities.includes(activity.id)
+  }));
+
   if (selectedActivity) {
-    return (
-      <ActivityRegistrationForm 
-        activityType={selectedActivity.category}
-        activityTitle={selectedActivity.title}
-        description={selectedActivity.description}
-        requiredDocuments={selectedActivity.documents}
-        onBackClick={() => setSelectedActivity(null)}
-      />
-    );
+    if (registrationStep === 'form') {
+      return (
+        <ActivityRegistrationForm 
+          activityType={selectedActivity.category}
+          activityTitle={selectedActivity.title}
+          description={selectedActivity.description}
+          requiredDocuments={selectedActivity.documents}
+          onBackClick={cancelRegistration}
+          onSubmit={submitRegistration}
+          uploadedDocuments={uploadedDocuments}
+          onDocumentUpload={handleDocumentUpload}
+        />
+      );
+    } else if (registrationStep === 'confirmation') {
+      return (
+        <ActivityRegistrationConfirmation
+          activity={selectedActivity}
+          uploadedDocuments={uploadedDocuments}
+          onConfirm={confirmRegistration}
+          onCancel={cancelRegistration}
+        />
+      );
+    } else {
+      return (
+        <ActivityRegistrationSuccess
+          activity={selectedActivity}
+          onClose={cancelRegistration}
+        />
+      );
+    }
   }
 
   return (
     <FadeIn>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {activities.map((activity, index) => (
+        {activitiesWithFavorites.map((activity, index) => (
           <Card key={`${activity.title}-${index}`} className="overflow-hidden transition-all duration-300 hover:shadow-md border border-border/50 h-full">
             <CardHeader className="p-6">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4">
-                <activity.icon size={24} />
+              <div className="flex justify-between items-start">
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4">
+                  <activity.icon size={24} />
+                </div>
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleFavorite(activity.id);
+                  }}
+                  className="h-8 w-8"
+                >
+                  <Star 
+                    size={18} 
+                    className={activity.isFavorite ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"}
+                  />
+                </Button>
               </div>
               <CardTitle>{activity.title}</CardTitle>
             </CardHeader>

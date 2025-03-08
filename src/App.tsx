@@ -13,6 +13,7 @@ import Accidents from "./pages/Accidents";
 import Pilgrimage from "./pages/Pilgrimage";
 import Recreation from "./pages/Recreation";
 import Activities from "./pages/Activities";
+import Dining from "./pages/Dining";
 
 const queryClient = new QueryClient();
 
@@ -25,7 +26,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/housing" element={<NotFound />} />
-          <Route path="/dining" element={<NotFound />} />
+          <Route path="/dining" element={<Dining />} />
           <Route path="/scholarships" element={<SocialAids />} />
           <Route path="/health" element={<Health />} />
           <Route path="/activities" element={<Activities />} />

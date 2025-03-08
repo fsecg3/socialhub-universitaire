@@ -13,16 +13,20 @@ export interface LoanDetail {
   title: string;
   description: string;
   features: string[];
-  documents: string[];
+  documents: { name: string; required: boolean }[];
   interestRate?: string;
   maxAmount?: string;
   maxDuration?: string;
   processingTime?: string;
 }
 
+export type LoanApplicationStep = 'form' | 'confirmation' | 'success';
+
 const useLoans = () => {
   const [activeTab, setActiveTab] = useState('loans');
   const [selectedLoan, setSelectedLoan] = useState<LoanCategory | null>(null);
+  const [registrationStep, setRegistrationStep] = useState<LoanApplicationStep>('form');
+  const [uploadedDocuments, setUploadedDocuments] = useState<Record<string, boolean>>({});
   const { toast } = useToast();
 
   const showNotAvailableMessage = () => {
@@ -31,6 +35,29 @@ const useLoans = () => {
       description: "Cette fonctionnalité sera disponible prochainement.",
       duration: 3000,
     });
+  };
+
+  const handleDocumentUpload = (documentName: string) => {
+    setUploadedDocuments(prev => ({
+      ...prev,
+      [documentName]: true
+    }));
+  };
+
+  const submitLoanApplication = (formData: any) => {
+    // Here you would typically send the data to your backend
+    console.log('Loan application submitted:', formData);
+    setRegistrationStep('confirmation');
+  };
+
+  const confirmLoanApplication = () => {
+    setRegistrationStep('success');
+  };
+
+  const cancelLoanApplication = () => {
+    setSelectedLoan(null);
+    setRegistrationStep('form');
+    setUploadedDocuments({});
   };
 
   const loanDetails: Record<LoanCategory, LoanDetail> = {
@@ -45,9 +72,11 @@ const useLoans = () => {
         'Suivi du remboursement'
       ],
       documents: [
-        'Justificatif de revenu',
-        'Projet de mariage',
-        'Garanties'
+        { name: 'Justificatif de revenu', required: true },
+        { name: 'Projet de mariage', required: true },
+        { name: 'Garanties', required: true },
+        { name: 'Pièce d\'identité', required: true },
+        { name: 'RIB bancaire', required: true }
       ],
       interestRate: '3% à 4%',
       maxAmount: '500 000 DA',
@@ -65,9 +94,11 @@ const useLoans = () => {
         'Plan de remboursement flexible'
       ],
       documents: [
-        'Justificatifs médicaux',
-        'Devis médical',
-        'Attestation de soins'
+        { name: 'Justificatifs médicaux', required: true },
+        { name: 'Devis médical', required: true },
+        { name: 'Attestation de soins', required: true },
+        { name: 'Pièce d\'identité', required: true },
+        { name: 'RIB bancaire', required: true }
       ],
       interestRate: '2% à 3%',
       maxAmount: '400 000 DA',
@@ -85,9 +116,11 @@ const useLoans = () => {
         'Conditions avantageuses'
       ],
       documents: [
-        'Devis',
-        'Plan des travaux',
-        'Propriété du logement'
+        { name: 'Devis', required: true },
+        { name: 'Plan des travaux', required: true },
+        { name: 'Propriété du logement', required: true },
+        { name: 'Justificatif de revenus', required: true },
+        { name: 'RIB bancaire', required: true }
       ],
       interestRate: '3.5% à 4.5%',
       maxAmount: '800 000 DA',
@@ -105,9 +138,11 @@ const useLoans = () => {
         'Suivi administratif'
       ],
       documents: [
-        'Promesse d\'achat',
-        'Plan de financement',
-        'Revenus'
+        { name: 'Promesse d\'achat', required: true },
+        { name: 'Plan de financement', required: true },
+        { name: 'Justificatif de revenus', required: true },
+        { name: 'Acte de propriété ou permis de construire', required: true },
+        { name: 'RIB bancaire', required: true }
       ],
       interestRate: '4% à 5%',
       maxAmount: '3 000 000 DA',
@@ -122,7 +157,13 @@ const useLoans = () => {
     selectedLoan,
     setSelectedLoan,
     loanDetails,
-    showNotAvailableMessage
+    showNotAvailableMessage,
+    registrationStep,
+    uploadedDocuments,
+    handleDocumentUpload,
+    submitLoanApplication,
+    confirmLoanApplication,
+    cancelLoanApplication
   };
 };
 

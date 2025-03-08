@@ -14,26 +14,43 @@ import {
 } from 'lucide-react';
 import FadeIn from '@/components/animations/FadeIn';
 import { useToast } from '@/hooks/use-toast';
+import useLoans, { LoanCategory } from '@/hooks/useLoans';
+import LoanApplicationForm from './LoanApplicationForm';
+import LoanApplicationConfirmation from './LoanApplicationConfirmation';
+import LoanApplicationSuccess from './LoanApplicationSuccess';
 
 const LoansList = () => {
-  const { toast } = useToast();
+  const { 
+    showNotAvailableMessage, 
+    selectedLoan, 
+    setSelectedLoan, 
+    loanDetails,
+    registrationStep,
+    uploadedDocuments,
+    handleDocumentUpload,
+    submitLoanApplication,
+    confirmLoanApplication,
+    cancelLoanApplication
+  } = useLoans();
   const [expandedLoan, setExpandedLoan] = useState<string | null>(null);
+  const [formData, setFormData] = useState<any>(null);
 
   const toggleExpand = (loanId: string) => {
     setExpandedLoan(expandedLoan === loanId ? null : loanId);
   };
 
-  const showNotAvailableMessage = () => {
-    toast({
-      title: "Fonctionnalité à venir",
-      description: "Cette fonctionnalité sera disponible prochainement.",
-      duration: 3000,
-    });
+  const handleLoanRequest = (loanId: LoanCategory) => {
+    setSelectedLoan(loanId);
+  };
+
+  const handleSubmitApplication = (data: any) => {
+    setFormData(data);
+    submitLoanApplication(data);
   };
 
   const loans = [
     {
-      id: "marriage",
+      id: "marriage" as LoanCategory,
       title: "Prêt Mariage",
       description: "Financement adapté pour votre projet de mariage avec des conditions avantageuses.",
       icon: Heart,
@@ -54,7 +71,7 @@ const LoansList = () => {
       maxDuration: "48 mois"
     },
     {
-      id: "medical",
+      id: "medical" as LoanCategory,
       title: "Prêt Médical",
       description: "Financement pour vos frais médicaux importants avec des conditions préférentielles.",
       icon: Stethoscope,
@@ -75,7 +92,7 @@ const LoansList = () => {
       maxDuration: "36 mois"
     },
     {
-      id: "renovation",
+      id: "renovation" as LoanCategory,
       title: "Prêt Rénovation Logement",
       description: "Financement pour vos projets de rénovation et d'amélioration de votre logement.",
       icon: Home,
@@ -96,7 +113,7 @@ const LoansList = () => {
       maxDuration: "60 mois"
     },
     {
-      id: "purchase",
+      id: "purchase" as LoanCategory,
       title: "Prêt Achat/Construction Logement",
       description: "Solution de financement pour l'achat ou la construction de votre logement.",
       icon: Building,
@@ -117,6 +134,40 @@ const LoansList = () => {
       maxDuration: "300 mois"
     }
   ];
+
+  // Render application form if a loan is selected
+  if (selectedLoan) {
+    const selectedLoanDetails = loanDetails[selectedLoan];
+    
+    if (registrationStep === 'form') {
+      return (
+        <LoanApplicationForm 
+          loan={selectedLoanDetails}
+          onBackClick={cancelLoanApplication}
+          onSubmit={handleSubmitApplication}
+          uploadedDocuments={uploadedDocuments}
+          onDocumentUpload={handleDocumentUpload}
+        />
+      );
+    } else if (registrationStep === 'confirmation') {
+      return (
+        <LoanApplicationConfirmation
+          loan={selectedLoanDetails}
+          formData={formData}
+          uploadedDocuments={uploadedDocuments}
+          onConfirm={confirmLoanApplication}
+          onCancel={cancelLoanApplication}
+        />
+      );
+    } else {
+      return (
+        <LoanApplicationSuccess
+          loan={selectedLoanDetails}
+          onClose={cancelLoanApplication}
+        />
+      );
+    }
+  }
 
   return (
     <FadeIn>
@@ -192,7 +243,7 @@ const LoansList = () => {
               )}
             </CardContent>
             <CardFooter className="p-6 pt-0 mt-auto">
-              <Button className="w-full" onClick={showNotAvailableMessage}>
+              <Button className="w-full" onClick={() => handleLoanRequest(loan.id)}>
                 {loan.action}
               </Button>
             </CardFooter>

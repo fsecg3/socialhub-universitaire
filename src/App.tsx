@@ -14,6 +14,7 @@ import Pilgrimage from "./pages/Pilgrimage";
 import Recreation from "./pages/Recreation";
 import Activities from "./pages/Activities";
 import Dining from "./pages/Dining";
+import Housing from "./pages/Housing";
 
 const queryClient = new QueryClient();
 
@@ -25,7 +26,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/housing" element={<NotFound />} />
+          <Route path="/housing" element={<Housing />} />
           <Route path="/dining" element={<Dining />} />
           <Route path="/scholarships" element={<SocialAids />} />
           <Route path="/health" element={<Health />} />

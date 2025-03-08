@@ -4,69 +4,99 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button';
 import { Volleyball, Theater, Beaker } from 'lucide-react';
 import FadeIn from '@/components/animations/FadeIn';
-import useActivities from '@/hooks/useActivities';
+import useActivities, { ActivityCategory } from '@/hooks/useActivities';
 import useActions from '@/hooks/useActions';
+import ActivityRegistrationForm from './ActivityRegistrationForm';
 
 interface ActivitiesListProps {
-  category?: string;
+  category?: ActivityCategory;
   onActionClick?: () => void;
 }
 
 const ActivitiesList: React.FC<ActivitiesListProps> = ({ category, onActionClick }) => {
-  const { showNotAvailableMessage } = useActivities();
+  const { showNotAvailableMessage, selectedActivity, setSelectedActivity } = useActivities();
   const { handleAction, isLoading } = useActions();
   
   const handleActivityAction = (activityTitle: string, actionType: string) => {
     if (onActionClick) {
       onActionClick();
     } else {
-      handleAction(actionType, `${actionType} pour "${activityTitle}"`);
+      const activity = allActivities.find(a => a.title === activityTitle);
+      if (activity) {
+        setSelectedActivity(activity);
+      } else {
+        handleAction(actionType, `${actionType} pour "${activityTitle}"`);
+      }
     }
   };
 
-  // Filtered activities based on category
+  // Activities with their registration requirements
   const allActivities = [
     {
+      id: "sports-events",
       title: "Événements sportifs",
       description: "Participez aux compétitions sportives inter-universitaires et tournois régionaux.",
       icon: Volleyball,
       action: "S'inscrire",
-      category: "sports"
+      category: "sports" as ActivityCategory,
+      documents: [
+        { name: "Certificat médical d'aptitude sportive", required: true },
+        { name: "Carte d'étudiant/personnel", required: true },
+        { name: "Photo d'identité", required: true }
+      ]
     },
     {
+      id: "sports-workshops",
       title: "Ateliers sportifs",
       description: "Ateliers d'entraînement et de perfectionnement dans diverses disciplines sportives.",
       icon: Volleyball,
       action: "Voir le programme",
-      category: "sports"
+      category: "sports" as ActivityCategory
     },
     {
+      id: "cultural-events",
       title: "Événements culturels",
       description: "Ateliers de théâtre, musique, et autres expressions artistiques pour tous les niveaux.",
       icon: Theater,
       action: "Découvrir le programme",
-      category: "culture"
+      category: "culture" as ActivityCategory,
+      documents: [
+        { name: "Formulaire d'inscription", required: true },
+        { name: "Justificatif d'affiliation universitaire", required: true }
+      ]
     },
     {
+      id: "art-exhibitions",
       title: "Expositions artistiques",
       description: "Expositions des œuvres d'art des étudiants et artistes invités.",
       icon: Theater,
       action: "Voir le calendrier",
-      category: "culture"
+      category: "culture" as ActivityCategory
     },
     {
+      id: "scientific-events",
       title: "Événements scientifiques",
       description: "Conférences, séminaires et ateliers scientifiques dans diverses disciplines académiques.",
       icon: Beaker,
       action: "Consulter le calendrier",
-      category: "science"
+      category: "science" as ActivityCategory,
+      documents: [
+        { name: "Formulaire de participation", required: true },
+        { name: "Résumé de présentation (si applicable)", required: false }
+      ]
     },
     {
+      id: "innovation-contests",
       title: "Concours d'innovation",
       description: "Compétitions et challenges pour encourager l'innovation et la recherche.",
       icon: Beaker,
       action: "S'inscrire",
-      category: "science"
+      category: "science" as ActivityCategory,
+      documents: [
+        { name: "Description du projet", required: true },
+        { name: "CV du/des participant(s)", required: true },
+        { name: "Attestation d'encadrement (si applicable)", required: false }
+      ]
     },
   ];
 
@@ -74,6 +104,18 @@ const ActivitiesList: React.FC<ActivitiesListProps> = ({ category, onActionClick
   const activities = category 
     ? allActivities.filter(activity => activity.category === category)
     : allActivities;
+
+  if (selectedActivity) {
+    return (
+      <ActivityRegistrationForm 
+        activityType={selectedActivity.category}
+        activityTitle={selectedActivity.title}
+        description={selectedActivity.description}
+        requiredDocuments={selectedActivity.documents}
+        onBackClick={() => setSelectedActivity(null)}
+      />
+    );
+  }
 
   return (
     <FadeIn>
